@@ -32,14 +32,44 @@ export default function Gallery() {
   preciseRef.current = precise;
   reducedRef.current = reduced;
 
-  const go = useCallback(
-    (next: number) => {
-      const i = (next + GALLERY.length) % GALLERY.length;
-      setIndex(i);
-      api.current?.to(i);
-    },
-    [],
-  );
+  const go = useCallback((next: number) => {
+    const i = (next + GALLERY.length) % GALLERY.length;
+    setIndex(i);
+    api.current?.to(i);
+  }, []);
+
+  /* Horizontal drag / swipe across the plate. A threshold rather than a
+     1:1 scrub — the transition is a displacement dissolve, and dragging it
+     back and forth mid-dissolve just looks broken. */
+  const drag = useRef<{ x: number; active: boolean }>({ x: 0, active: false });
+
+  const onDragStart = (e: React.PointerEvent) => {
+    drag.current = { x: e.clientX, active: true };
+  };
+
+  const onDragMove = (e: React.PointerEvent) => {
+    if (!drag.current.active) return;
+    const dx = e.clientX - drag.current.x;
+    if (Math.abs(dx) < 64) return;
+    drag.current.active = false;
+    setIndex((i) => {
+      const n = (i + (dx < 0 ? 1 : -1) + GALLERY.length) % GALLERY.length;
+      api.current?.to(n);
+      return n;
+    });
+  };
+
+  const onDragEnd = (e: React.PointerEvent) => {
+    // A press that never travelled is a click: advance.
+    if (drag.current.active && Math.abs(e.clientX - drag.current.x) < 6) {
+      setIndex((i) => {
+        const n = (i + 1) % GALLERY.length;
+        api.current?.to(n);
+        return n;
+      });
+    }
+    drag.current.active = false;
+  };
 
   /* ------------------------------------------------------------ renderer -- */
 
@@ -354,8 +384,11 @@ export default function Gallery() {
             className={s.stage}
             ref={stage}
             data-cursor="drag"
-            data-cursor-label="Distort"
-            onClick={() => go(index + 1)}
+            data-cursor-label="Drag"
+            onPointerDown={onDragStart}
+            onPointerMove={onDragMove}
+            onPointerUp={onDragEnd}
+            onPointerCancel={() => (drag.current.active = false)}
           >
             {webgl === false &&
               GALLERY.map((g, i) => (

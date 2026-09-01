@@ -101,6 +101,7 @@ export default function Preloader() {
       data-done={done}
       style={{ clipPath: 'inset(0 0 0% 0)' }}
       aria-hidden="true"
+      data-preloader
     >
       <div className={s.glow} />
       <div className="u-shell">

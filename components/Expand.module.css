@@ -20,7 +20,10 @@
   position: absolute;
   z-index: 1;
   font-family: var(--font-display);
-  font-size: clamp(5rem, 26vw, 24rem);
+  /* Has to stay wider than the collapsed frame (which exposes only the
+     middle third) or the word is never seen at all. A tighter rem cap does
+     exactly that on an ultrawide display. */
+  font-size: clamp(4.5rem, 27vw, 40rem);
   line-height: 0.8;
   letter-spacing: -0.045em;
   color: var(--fg);

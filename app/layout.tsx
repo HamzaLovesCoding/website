@@ -52,6 +52,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${serif.variable} ${grotesk.variable} ${mono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        {/* The loader is server-rendered so there is no flash before it takes
+            over. Without JS it would never lift, so it is dismissed here. */}
+        <noscript>
+          <style>{'[data-preloader]{display:none!important}'}</style>
+        </noscript>
+      </head>
       <body>
         <a className="u-skip" href="#main">
           Skip to content

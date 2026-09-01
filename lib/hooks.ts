@@ -30,6 +30,3 @@ export const useReducedMotion = () =>
  */
 export const usePrecisePointer = () =>
   useMediaQuery('(hover: hover) and (pointer: fine)');
-
-export const useBreakpoint = (px: number) =>
-  useMediaQuery(`(min-width: ${px}px)`);

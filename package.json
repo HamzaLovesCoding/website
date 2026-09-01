@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "media": "node scripts/generate-media.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",

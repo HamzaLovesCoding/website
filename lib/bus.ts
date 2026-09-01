@@ -12,7 +12,7 @@ export const introDone = () => {
   window.dispatchEvent(new Event(EVT));
 };
 
-export const hasIntroed = () =>
+const hasIntroed = () =>
   typeof document !== 'undefined' &&
   document.documentElement.dataset.intro === 'done';
 
