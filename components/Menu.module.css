@@ -1,0 +1,224 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  /* Kept in the DOM so the open/close timeline owns visibility, but fully
+     inert while closed. */
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.overlay[data-open='true'] {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* --- the curtain ---------------------------------------------------------- */
+
+/* Two panels wiping in sequence. The accent leads by a beat and is gone
+   before you can read it — it registers as a flash of colour, not a screen. */
+.panel {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(100% 0 0 0);
+  will-change: clip-path;
+}
+
+.panelAccent {
+  background: var(--accent);
+}
+
+.panelBase {
+  /* Fully opaque. Against a near-black page even 3% of leaked white doubles
+     the local luminance, so a translucent curtain ghosts the hero headline
+     straight through the menu. The page is pushed back behind it instead
+     (see Menu.tsx), which reads as depth without the leak. */
+  background: #0b0908;
+}
+
+/* Warm floor light so the overlay belongs to the same world as the page. */
+.panelBase::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 60% at 78% 108%, rgba(240, 59, 15, 0.3), transparent 70%),
+    radial-gradient(50% 45% at 10% -10%, rgba(240, 59, 15, 0.12), transparent 70%);
+  pointer-events: none;
+}
+
+/* --- layout --------------------------------------------------------------- */
+
+.inner {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-block: clamp(5.5rem, 12vh, 8rem) clamp(1.5rem, 4vh, 3rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.row {
+  position: relative;
+  border-top: 1px solid rgba(244, 241, 236, 0.1);
+}
+
+.row:last-child {
+  border-bottom: 1px solid rgba(244, 241, 236, 0.1);
+}
+
+.link {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding-block: clamp(0.35rem, 1vh, 0.75rem);
+  width: 100%;
+  isolation: isolate;
+}
+
+.index {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.16em;
+  color: var(--fg-faint);
+  transition: color 0.45s var(--ease-out);
+  flex: 0 0 auto;
+}
+
+.label {
+  font-family: var(--font-display);
+  /* Sized so all five rows plus the aside fit a laptop viewport without
+     the list needing to scroll. */
+  font-size: clamp(2rem, 6.4vw, 5.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  color: var(--fg);
+  display: inline-block;
+  will-change: transform;
+  transition: color 0.45s var(--ease-out);
+}
+
+/* The row slides right and lightens on hover; the fill behind it wipes in
+   from the left at the same time. */
+.link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to right,
+    rgba(240, 59, 15, 0.16),
+    transparent 72%
+  );
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s var(--ease-out);
+}
+
+.link:hover::before {
+  transform: scaleX(1);
+}
+
+.link:hover .index {
+  color: var(--accent);
+}
+
+.arrow {
+  margin-left: auto;
+  align-self: center;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-1.5rem);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+}
+
+.link:hover .arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* --- aside ---------------------------------------------------------------- */
+
+.aside {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
+  padding-top: clamp(1.25rem, 3vh, 2rem);
+  border-top: 1px solid rgba(244, 241, 236, 0.1);
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.colBody {
+  font-size: var(--t-small);
+  color: var(--fg-mute);
+  line-height: 1.5;
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+}
+
+.social {
+  font-size: var(--t-small);
+  color: var(--fg-mute);
+  transition: color 0.35s var(--ease-out);
+}
+
+.social:hover {
+  color: var(--accent);
+}
+
+/* --- hover preview -------------------------------------------------------- */
+
+.preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: clamp(14rem, 20vw, 22rem);
+  aspect-ratio: 4 / 5;
+  /* Fixed units: a percentage margin here resolves against the viewport
+     width, which throws the plate off-screen on wide displays. */
+  margin: -11rem 0 0 2.25rem;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+  border-radius: 2px;
+  will-change: transform;
+  opacity: 0;
+}
+
+.previewImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.14);
+  will-change: transform, opacity, clip-path;
+}
+
+@media (max-width: 900px) {
+  .preview { display: none; }
+  .list { margin-top: 0; }
+  .arrow { display: none; }
+}

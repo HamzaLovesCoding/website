@@ -1,0 +1,35 @@
+.root {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* Edges dissolve rather than cut, so the strip reads as continuous. */
+  -webkit-mask-image: linear-gradient(
+    to right, transparent, #000 8%, #000 92%, transparent
+  );
+  mask-image: linear-gradient(
+    to right, transparent, #000 8%, #000 92%, transparent
+  );
+}
+
+.root[data-hard='true'] {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.item {
+  flex: 0 0 auto;
+  padding-inline: clamp(1.5rem, 3vw, 3.25rem);
+  white-space: nowrap;
+}

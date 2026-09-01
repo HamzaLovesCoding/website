@@ -1,0 +1,162 @@
+.footer {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--line);
+  padding-top: clamp(3rem, 8vh, 5rem);
+  overflow: clip;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding-bottom: clamp(3rem, 8vh, 6rem);
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.colBody {
+  font-size: var(--t-small);
+  color: var(--fg-mute);
+  line-height: 1.6;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+}
+
+.item {
+  position: relative;
+  font-size: var(--t-small);
+  color: var(--fg-mute);
+  transition: color 0.4s var(--ease-out);
+}
+
+.item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.item:hover { color: var(--fg); }
+
+.item:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* --- the wordmark --------------------------------------------------------- */
+
+.markWrap {
+  position: relative;
+  padding-inline: var(--gutter);
+  padding-bottom: clamp(1rem, 3vh, 2rem);
+  /* The cursor light needs the whole band, not just the glyphs. */
+  cursor: none;
+}
+
+.mark {
+  position: relative;
+  display: block;
+  height: max-content;
+}
+
+/* Three stacked copies of the same text. The bottom one is always visible;
+   the two above it are revealed only where the pointer is, which is what
+   turns the cursor into a light being carried across the type. */
+.layer {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 18.6vw, 19rem);
+  line-height: 0.86;
+  letter-spacing: -0.042em;
+  white-space: nowrap;
+  text-align: center;
+  user-select: none;
+}
+
+.layer:not(.layerBase) {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.layerBase { color: rgba(244, 241, 236, 0.1); }
+
+.layerAccent {
+  color: var(--accent);
+  -webkit-mask-image: radial-gradient(
+    circle 26vmin at var(--mx, 50%) var(--my, 50%),
+    #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 72%
+  );
+  mask-image: radial-gradient(
+    circle 26vmin at var(--mx, 50%) var(--my, 50%),
+    #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 72%
+  );
+}
+
+.layerHot {
+  color: #fff;
+  -webkit-mask-image: radial-gradient(
+    circle 10vmin at var(--mx, 50%) var(--my, 50%),
+    #000 0%, rgba(0, 0, 0, 0.35) 48%, transparent 70%
+  );
+  mask-image: radial-gradient(
+    circle 10vmin at var(--mx, 50%) var(--my, 50%),
+    #000 0%, rgba(0, 0, 0, 0.35) 48%, transparent 70%
+  );
+}
+
+.char {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* --- bottom bar ----------------------------------------------------------- */
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-block: clamp(1.25rem, 3vh, 2rem);
+  border-top: 1px solid var(--line-soft);
+}
+
+.legal {
+  display: flex;
+  gap: clamp(1rem, 2vw, 2rem);
+  flex-wrap: wrap;
+}
+
+.toTop {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+  transition: color 0.4s var(--ease-out);
+}
+
+.toTop:hover { color: var(--accent); }
+
+@media (hover: none), (pointer: coarse) {
+  .markWrap { cursor: default; }
+}

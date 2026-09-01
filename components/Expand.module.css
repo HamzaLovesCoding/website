@@ -1,0 +1,106 @@
+.section {
+  position: relative;
+  height: 300vh;
+  z-index: 2;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: clip;
+  display: grid;
+  place-items: center;
+}
+
+/* Oversized word sitting behind the plate. As the frame opens it swallows
+   the word — the handoff from typography to image. */
+.word {
+  position: absolute;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 26vw, 24rem);
+  line-height: 0.8;
+  letter-spacing: -0.045em;
+  color: var(--fg);
+  white-space: nowrap;
+  will-change: transform;
+  user-select: none;
+}
+
+.wordSub {
+  position: absolute;
+  z-index: 1;
+  bottom: clamp(2rem, 8vh, 5rem);
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* The expanding frame. Clip-path rather than width/height so the image
+   inside never distorts and the corners can round independently. */
+.frame {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  clip-path: inset(30% 34% 30% 34% round 6px);
+  will-change: clip-path;
+}
+
+.frameMedia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.frameVeil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 5, 5, 0.55) 0%,
+    transparent 35%,
+    transparent 60%,
+    rgba(5, 5, 5, 0.75) 100%
+  );
+}
+
+/* Caption that only exists once the frame is full-bleed. */
+.caption {
+  position: absolute;
+  z-index: 3;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: clamp(2rem, 6vh, 4rem);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  opacity: 0;
+}
+
+.captionTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  max-width: 16ch;
+}
+
+.captionTitle em { font-style: italic; }
+
+.tick {
+  position: absolute;
+  z-index: 3;
+  top: clamp(5.5rem, 12vh, 8rem);
+  right: var(--gutter);
+  text-align: right;
+  opacity: 0;
+}

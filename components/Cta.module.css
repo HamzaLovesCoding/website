@@ -1,0 +1,116 @@
+.section {
+  position: relative;
+  z-index: 2;
+  padding-block: clamp(8rem, 20vh, 16rem) clamp(5rem, 12vh, 9rem);
+  overflow: clip;
+}
+
+/* Light rising from behind the call to action — the brightest ambient
+   moment on the page, which is the point. */
+.glow {
+  position: absolute;
+  left: 50%;
+  bottom: -55vmax;
+  width: 110vmax;
+  height: 110vmax;
+  translate: -50% 0;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(240, 59, 15, 0.3),
+    rgba(240, 59, 15, 0.07) 45%,
+    transparent 72%
+  );
+  pointer-events: none;
+  will-change: transform;
+  /* The section clips its overflow, which would otherwise slice the glow off
+     with a hard horizontal edge right where the footer starts. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 88%);
+  mask-image: linear-gradient(to bottom, #000 50%, transparent 88%);
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+}
+
+.headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8.5vw, 9rem);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  max-width: 16ch;
+}
+
+.headline em { font-style: italic; }
+
+.dim { color: var(--fg-faint); }
+
+.foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(2rem, 5vw, 5rem);
+  flex-wrap: wrap;
+  margin-top: clamp(3rem, 8vh, 5.5rem);
+}
+
+.note {
+  max-width: 34ch;
+  color: var(--fg-mute);
+  font-size: var(--t-small);
+}
+
+/* --- the button ----------------------------------------------------------- */
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem 1.5rem 1.15rem 1.85rem;
+  border-radius: 100px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  overflow: hidden;
+  isolation: isolate;
+  will-change: transform;
+}
+
+/* Second fill sweeping up under the label on hover. */
+.button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--fg);
+  transform: translateY(101%);
+  transition: transform 0.6s var(--ease-out);
+}
+
+.button:hover::before { transform: translateY(0); }
+
+.button:hover { color: var(--bg); }
+
+.buttonLabel {
+  display: inline-block;
+  will-change: transform;
+}
+
+.buttonArrow {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  transition: background 0.5s var(--ease-out), transform 0.6s var(--ease-out);
+}
+
+.button:hover .buttonArrow {
+  background: rgba(10, 10, 10, 0.12);
+  transform: rotate(45deg);
+}

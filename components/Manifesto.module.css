@@ -1,0 +1,101 @@
+.section {
+  position: relative;
+  /* Extra height is the scroll budget the pinned reveal is scrubbed against. */
+  height: 260vh;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: clip;
+}
+
+/* Full-bleed plate drifting behind the words at a slower rate. */
+.plate {
+  position: absolute;
+  inset: -12% -6%;
+  z-index: 0;
+  opacity: 0.42;
+  will-change: transform;
+}
+
+.plateImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.plateVeil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, var(--bg) 0%, transparent 22%, transparent 76%, var(--bg) 100%),
+    radial-gradient(75% 60% at 50% 50%, transparent 20%, rgba(10, 10, 10, 0.72) 100%);
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+}
+
+.label {
+  margin-bottom: clamp(1.5rem, 4vh, 2.75rem);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 8vw, 8.5rem);
+  line-height: 0.94;
+  letter-spacing: -0.028em;
+  max-width: 16ch;
+}
+
+/* Each word starts as a dim ghost and resolves as the scroll passes it. */
+.word {
+  display: inline-block;
+  color: var(--fg-ghost);
+  will-change: color, opacity, transform;
+}
+
+.body {
+  margin-top: clamp(2rem, 5vh, 3.5rem);
+  margin-left: auto;
+  max-width: 42ch;
+  font-size: var(--t-body-l);
+  color: var(--fg-mute);
+}
+
+.stats {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  gap: clamp(1.75rem, 4vh, 2.5rem) clamp(1.5rem, 4vw, 3rem);
+  margin-top: clamp(2.5rem, 7vh, 5rem);
+  padding-top: clamp(1.25rem, 3vh, 2rem);
+  border-top: 1px solid var(--line);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.statN {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+}
+
+@media (max-width: 800px) {
+  .section { height: 220vh; }
+  .body { margin-left: 0; }
+}

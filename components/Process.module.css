@@ -1,0 +1,144 @@
+.section {
+  position: relative;
+  z-index: 2;
+  /* Vertical budget that gets converted into horizontal travel. */
+  height: 340vh;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: clip;
+  /* Leaves the progress readout its own band beneath the rail instead of
+     letting the two share the same optical centre. */
+  padding-bottom: clamp(3rem, 9vh, 6rem);
+}
+
+.rail {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(1rem, 2.5vw, 2.5rem);
+  padding-inline: var(--gutter);
+  width: max-content;
+  will-change: transform;
+}
+
+/* Leading panel — the section title travels with the rail rather than
+   sitting above it, so the whole thing reads as one filmstrip. */
+.lead {
+  flex: 0 0 auto;
+  width: min(34rem, 74vw);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 1rem;
+  padding-right: clamp(1rem, 4vw, 4rem);
+}
+
+.leadTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5.5vw, 5rem);
+  line-height: 0.97;
+  letter-spacing: -0.03em;
+  margin-block: 1.25rem;
+}
+
+.leadTitle em { font-style: italic; }
+
+.leadBody {
+  color: var(--fg-mute);
+  max-width: 36ch;
+  font-size: var(--t-small);
+}
+
+.card {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(22rem, 68vw);
+  min-height: min(62svh, 33rem);
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(
+    to bottom,
+    rgba(244, 241, 236, 0.035),
+    rgba(244, 241, 236, 0.008)
+  );
+  overflow: hidden;
+  transition: border-color 0.6s var(--ease-out);
+}
+
+.card:hover { border-color: rgba(240, 59, 15, 0.55); }
+
+/* Warm wash that only shows on the card being read. */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: auto -20% -60% -20%;
+  height: 70%;
+  background: radial-gradient(60% 100% at 50% 100%, rgba(240, 59, 15, 0.35), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-out);
+  pointer-events: none;
+}
+
+.card:hover::after { opacity: 1; }
+
+.cardIndex {
+  font-family: var(--font-mono);
+  font-size: clamp(2.5rem, 4vw, 3.75rem);
+  line-height: 1;
+  font-weight: 300;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(244, 241, 236, 0.35);
+}
+
+.cardTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.cardBody {
+  font-size: var(--t-small);
+  color: var(--fg-mute);
+  max-width: 26ch;
+}
+
+/* --- progress ------------------------------------------------------------- */
+
+.progress {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: clamp(2rem, 6vh, 3.5rem);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bar {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.barFill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+}

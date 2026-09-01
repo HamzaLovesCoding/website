@@ -1,0 +1,102 @@
+/* ---------------------------------------------------------- ambient light */
+
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  /* Scrubbed by ScrollTrigger — sections marked data-ambient push it up. */
+  opacity: var(--ambient, 0.5);
+  transition: opacity 0.6s linear;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  will-change: transform;
+  /* Radial gradients instead of blur() — visually identical at this scale
+     and it keeps a full-viewport layer off the filter path. */
+}
+
+.blobA {
+  width: 120vmax;
+  height: 120vmax;
+  left: -30vmax;
+  top: -45vmax;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(240, 59, 15, 0.3),
+    rgba(150, 32, 8, 0.12) 42%,
+    transparent 70%
+  );
+}
+
+.blobB {
+  width: 90vmax;
+  height: 90vmax;
+  right: -30vmax;
+  top: 25vmax;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(255, 106, 42, 0.22),
+    rgba(122, 29, 5, 0.1) 40%,
+    transparent 68%
+  );
+}
+
+.blobC {
+  width: 70vmax;
+  height: 70vmax;
+  left: 20vmax;
+  bottom: -35vmax;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(214, 48, 10, 0.24),
+    transparent 66%
+  );
+}
+
+/* A vignette keeps the ambient light from washing out the page edges. */
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 120% 90% at 50% 45%,
+    transparent 35%,
+    rgba(5, 5, 5, 0.55) 100%
+  );
+}
+
+/* ------------------------------------------------------------------ grain */
+
+.grain {
+  position: fixed;
+  inset: -150%;
+  z-index: 110;
+  pointer-events: none;
+  width: 400%;
+  height: 400%;
+  background-image: url('/media/grain.png');
+  background-repeat: repeat;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  animation: drift 0.9s steps(4) infinite;
+}
+
+/* Stepped rather than smooth — continuous motion reads as a moving texture,
+   stepped reads as film. */
+@keyframes drift {
+  0% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-3%, 2%, 0); }
+  50% { transform: translate3d(2%, -3%, 0); }
+  75% { transform: translate3d(-2%, -2%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain { animation: none; }
+}

@@ -1,0 +1,195 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+  overflow: clip;
+}
+
+/* --- the shader plate ----------------------------------------------------- */
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.canvas canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Shown when WebGL is unavailable or the context is lost. Not a apology
+   screen — a static version of the same composition. */
+.fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(closest-side circle at 66% 46%, rgba(255, 106, 42, 0.42), transparent 68%),
+    radial-gradient(closest-side circle at 74% 58%, rgba(240, 59, 15, 0.5), transparent 60%),
+    radial-gradient(closest-side circle at 58% 38%, rgba(122, 29, 5, 0.55), transparent 72%),
+    var(--bg);
+  animation: breathe 18s ease-in-out infinite alternate;
+}
+
+@keyframes breathe {
+  from { transform: scale(1) translate3d(0, 0, 0); }
+  to   { transform: scale(1.12) translate3d(-2%, 1.5%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fallback { animation: none; }
+}
+
+/* --- composition ---------------------------------------------------------- */
+
+.inner {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-block: clamp(7rem, 14vh, 11rem) clamp(2rem, 5vh, 3.5rem);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: clamp(1.75rem, 4vh, 3rem);
+}
+
+/* Aligned to the first line rather than the block, so a label that wraps on
+   a narrow screen doesn't leave the rule floating in the middle of it. */
+.eyebrow::before {
+  content: '';
+  flex: 0 0 auto;
+  width: clamp(1.5rem, 4vw, 3.5rem);
+  height: 1px;
+  margin-top: 0.45em;
+  background: var(--accent);
+  transform-origin: left;
+}
+
+.headline {
+  font-size: var(--t-display-l);
+  max-width: 15ch;
+  margin-bottom: clamp(2.5rem, 6vh, 4.5rem);
+}
+
+.headline em {
+  /* The italic swash is the one flourish in the whole typeface pairing —
+     give it room and let it lean out of the line. */
+  font-style: italic;
+  padding-right: 0.04em;
+}
+
+.foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  flex-wrap: wrap;
+}
+
+.meta {
+  display: flex;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 8rem;
+}
+
+.metaValue {
+  font-size: var(--t-small);
+  color: var(--fg);
+  letter-spacing: -0.01em;
+}
+
+/* --- scroll cue ----------------------------------------------------------- */
+
+.cue {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding-bottom: 0.2rem;
+}
+
+.cueLine {
+  position: relative;
+  width: 1px;
+  height: 3.25rem;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.cueLine::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  height: 45%;
+  background: var(--accent);
+  animation: cue 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes cue {
+  0%   { transform: translateY(-100%); }
+  55%  { transform: translateY(240%); }
+  100% { transform: translateY(240%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cueLine::after { animation: none; transform: translateY(0); }
+}
+
+/* --- client strip --------------------------------------------------------- */
+
+.clients {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--line-soft);
+  padding-block: clamp(1.1rem, 2.2vh, 1.6rem);
+  background: linear-gradient(to top, rgba(5, 5, 5, 0.72), transparent);
+  backdrop-filter: blur(2px);
+}
+
+.client {
+  display: inline-block;
+  padding-inline: clamp(1.25rem, 3vw, 3rem);
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  transition: color 0.4s var(--ease-out);
+}
+
+.client:hover {
+  color: var(--fg);
+}
+
+@media (max-width: 700px) {
+  .headline {
+    max-width: 100%;
+  }
+
+  .foot {
+    align-items: flex-start;
+    flex-direction: column-reverse;
+  }
+
+  .cue {
+    display: none;
+  }
+}

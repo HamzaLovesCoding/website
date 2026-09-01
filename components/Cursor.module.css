@@ -1,0 +1,83 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  pointer-events: none;
+  /* The whole layer fades in once the pointer has actually moved. */
+  opacity: 0;
+}
+
+/* Soft orange influence trailing well behind the pointer. A radial gradient
+   rather than a blurred element — same look, none of the filter cost. */
+.glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 620px;
+  height: 620px;
+  margin: -310px 0 0 -310px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(240, 59, 15, 0.16),
+    rgba(240, 59, 15, 0.06) 45%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+.ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 1px solid rgba(244, 241, 236, 0.55);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  will-change: transform;
+  backdrop-filter: invert(0);
+}
+
+.dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  background: var(--fg);
+  border-radius: 50%;
+  will-change: transform;
+}
+
+/* The filled state used by media — the ring becomes a disc with a label. */
+.disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: scale(0);
+  will-change: transform;
+}
+
+.label {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .root {
+    display: none;
+  }
+}

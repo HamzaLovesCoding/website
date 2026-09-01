@@ -1,0 +1,82 @@
+.section {
+  position: relative;
+  z-index: 2;
+  padding-block: var(--section-y);
+}
+
+.list {
+  border-top: 1px solid var(--line);
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr) 9rem 3rem;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding-block: clamp(1.25rem, 3vh, 2rem);
+  border-bottom: 1px solid var(--line);
+  isolation: isolate;
+  transition: padding 0.6s var(--ease-out);
+}
+
+.row:hover { padding-inline: clamp(0.5rem, 1.5vw, 1.25rem); }
+
+/* Accent wash wiping in from the left on hover. */
+.row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to right, rgba(240, 59, 15, 0.14), transparent 60%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.75s var(--ease-out);
+}
+
+.row:hover::before { transform: scaleX(1); }
+
+.index {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.18em;
+  color: var(--fg-faint);
+  transition: color 0.45s var(--ease-out);
+}
+
+.row:hover .index { color: var(--accent); }
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.6vw, 2.35rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-align: right;
+}
+
+.arrow {
+  justify-self: end;
+  font-family: var(--font-mono);
+  color: var(--fg-faint);
+  transform: translateX(-0.5rem);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out),
+    color 0.5s var(--ease-out);
+}
+
+.row:hover .arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--accent);
+}
+
+@media (max-width: 760px) {
+  .row { grid-template-columns: 2.5rem minmax(0, 1fr) 1.5rem; }
+  .side { display: none; }
+}

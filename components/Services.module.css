@@ -1,0 +1,178 @@
+.section {
+  position: relative;
+  z-index: 2;
+  padding-block: var(--section-y);
+}
+
+.intro {
+  max-width: 44ch;
+  margin-left: auto;
+  margin-bottom: clamp(3rem, 8vh, 6rem);
+  font-size: var(--t-body-l);
+  color: var(--fg-mute);
+}
+
+.list {
+  border-top: 1px solid var(--line);
+}
+
+.row {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  overflow: clip;
+}
+
+/* The whole row is the hit area; it grows on hover so the list breathes
+   around whatever is being read. */
+.trigger {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) auto 3rem;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  width: 100%;
+  text-align: left;
+  padding-block: clamp(1.4rem, 3.4vh, 2.4rem);
+  transition: padding 0.7s var(--ease-out);
+}
+
+.row[data-on='true'] .trigger {
+  padding-block: clamp(2rem, 5vh, 3.6rem);
+}
+
+.index {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.18em;
+  color: var(--fg-faint);
+  transition: color 0.5s var(--ease-out);
+}
+
+.row[data-on='true'] .index { color: var(--accent); }
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+  will-change: transform;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.3rem 1rem;
+  max-width: 26rem;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-ghost);
+  white-space: nowrap;
+  transition: color 0.5s var(--ease-out);
+}
+
+.row[data-on='true'] .tag { color: var(--fg-mute); }
+
+.plus {
+  justify-self: end;
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
+.plus::before,
+.plus::after {
+  content: '';
+  position: absolute;
+  background: var(--fg-faint);
+  transition: background 0.5s var(--ease-out), transform 0.6s var(--ease-out);
+}
+
+.plus::before { inset: 50% 0 50% 0; height: 1px; }
+.plus::after { inset: 0 50% 0 50%; width: 1px; }
+
+.row[data-on='true'] .plus::before,
+.row[data-on='true'] .plus::after { background: var(--accent); }
+.row[data-on='true'] .plus::after { transform: scaleY(0); }
+
+/* --- keyword strip -------------------------------------------------------- */
+
+/* A ticker band along the foot of the row while it is active. It used to sit
+   directly behind the title at the same size, where the two sets of letter-
+   forms simply cancelled each other out. */
+.strip {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: clamp(0.4rem, 1vh, 0.7rem);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.stripText {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.8vw, 1.6rem);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(244, 241, 236, 0.3);
+  white-space: nowrap;
+  padding-inline: 1.25rem;
+}
+
+.star {
+  color: var(--accent);
+  -webkit-text-stroke: 0;
+  padding-inline: 0.75rem;
+}
+
+/* --- cursor trail --------------------------------------------------------- */
+
+/* Below the row's text (z-index 3) so the plates travel behind the words
+   rather than over them. */
+.trail {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 2;
+  width: clamp(7rem, 11vw, 11rem);
+  aspect-ratio: 4 / 5;
+  margin-top: -0.5%;
+  translate: -50% -50%;
+  pointer-events: none;
+  border-radius: 3px;
+  overflow: hidden;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.trailImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 860px) {
+  .trigger {
+    grid-template-columns: 2.5rem minmax(0, 1fr) 1.5rem;
+    align-items: center;
+  }
+
+  .tags { display: none; }
+  .trail { display: none; }
+  .intro { margin-left: 0; }
+
+  /* Without hover the strip has nothing to respond to, and at this width it
+     runs straight through the row title. The list is stronger plain. */
+  .strip { display: none; }
+}

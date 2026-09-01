@@ -1,0 +1,88 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: var(--bg-deep);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  will-change: clip-path;
+}
+
+.root[data-done='true'] {
+  pointer-events: none;
+}
+
+.glow {
+  position: absolute;
+  left: 50%;
+  bottom: -30vmax;
+  width: 90vmax;
+  height: 90vmax;
+  translate: -50% 0;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(240, 59, 15, 0.28),
+    transparent 68%
+  );
+  opacity: 0;
+}
+
+.inner {
+  position: relative;
+  padding-bottom: clamp(2rem, 6vh, 4rem);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.word {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  /* The scramble cycles glyphs of different widths; a fixed measure stops
+     the baseline from twitching. */
+  min-width: 8ch;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  font-weight: 300;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+.count sup {
+  font-size: 0.24em;
+  vertical-align: super;
+  color: var(--fg-faint);
+  letter-spacing: 0.1em;
+}
+
+.bar {
+  position: relative;
+  height: 1px;
+  width: 100%;
+  background: rgba(244, 241, 236, 0.12);
+  margin-top: clamp(1.25rem, 3vh, 2rem);
+  overflow: hidden;
+}
+
+.barFill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.label {
+  position: absolute;
+  top: clamp(1.5rem, 4vh, 3rem);
+  left: var(--gutter);
+}

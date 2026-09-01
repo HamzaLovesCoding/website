@@ -1,0 +1,52 @@
+.section {
+  position: relative;
+  z-index: 2;
+  min-height: 110svh;
+  display: flex;
+  align-items: center;
+  padding-block: var(--section-y);
+  overflow: clip;
+}
+
+.inner { width: 100%; }
+
+.label { margin-bottom: clamp(2rem, 5vh, 3.5rem); }
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.02em;
+}
+
+.line {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 11vw, 11rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+/* Each line is offset differently so the block reads as a composition
+   rather than a centred paragraph. */
+.line:nth-child(2) { padding-left: 8vw; }
+.line:nth-child(3) { padding-left: 3vw; color: var(--accent); }
+.line:nth-child(4) { padding-left: 16vw; }
+
+/* The scrambling line uses tabular figures so glyph swaps don't reflow it. */
+.glitch {
+  font-family: var(--font-mono);
+  font-size: clamp(0.9rem, 1.6vw, 1.35rem);
+  letter-spacing: 0.04em;
+  color: var(--fg-mute);
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+  max-width: 40ch;
+  margin-left: auto;
+}
+
+@media (max-width: 700px) {
+  .line { white-space: normal; }
+  .line:nth-child(2),
+  .line:nth-child(3),
+  .line:nth-child(4) { padding-left: 0; }
+}
