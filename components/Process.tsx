@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { gsap } from '@/lib/gsap';
+import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { useReducedMotion } from '@/lib/hooks';
 import { PROCESS } from '@/lib/content';
 import s from './Process.module.css';
@@ -22,6 +22,18 @@ export default function Process() {
     const track = rail.current;
     if (!section || !track) return;
 
+    // Measured from the captured node, not the ref: ScrollTrigger re-evaluates
+    // these on every refresh, including refreshes fired after this component
+    // has unmounted.
+    const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
+
+    // The section's height IS its scroll budget, and that budget should be
+    // exactly the distance the rail has to travel. Hard-coding it in CSS makes
+    // any surplus dead scroll on a pinned, motionless screen.
+    const sizeSection = () => {
+      section.style.height = `${distance() + window.innerHeight}px`;
+    };
+
     const ctx = gsap.context(() => {
       if (reduced) {
         // No pin, no translation — the rail just scrolls sideways by hand.
@@ -31,10 +43,8 @@ export default function Process() {
         return;
       }
 
-      // Measured from the node captured above, not from the ref: ScrollTrigger
-      // re-evaluates these on every refresh, including refreshes triggered
-      // after this component has unmounted.
-      const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
+      sizeSection();
+      ScrollTrigger.addEventListener('refreshInit', sizeSection);
 
       gsap.to(track, {
         x: () => -distance(),
@@ -78,11 +88,15 @@ export default function Process() {
       });
     }, section);
 
-    return () => ctx.revert();
+    return () => {
+      ScrollTrigger.removeEventListener('refreshInit', sizeSection);
+      section.style.removeProperty('height');
+      ctx.revert();
+    };
   }, [reduced]);
 
   return (
-    <section className={s.section} ref={root} data-ambient="0.55">
+    <section className={s.section} ref={root} data-ambient="0.36">
       <div className={s.sticky}>
         <div className={s.rail} ref={rail}>
           <div className={s.lead}>

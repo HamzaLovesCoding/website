@@ -20,7 +20,9 @@
   position: sticky;
   top: 0;
   height: 100vh;
-  height: 100svh;
+  /* Slightly under a viewport: each card's scroll budget is its own height,
+     so this is what sets how fast the deck is dealt. */
+  height: 92svh;
   display: flex;
   align-items: center;
   padding-block: clamp(1rem, 4vh, 3rem);

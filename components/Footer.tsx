@@ -121,7 +121,7 @@ export default function Footer() {
   }, [chars, precise, reduced]);
 
   return (
-    <footer className={s.footer} ref={root} data-ambient="0.8">
+    <footer className={s.footer} ref={root} data-ambient="0.6">
       <div className={`${s.top} u-shell`}>
         {FOOTER.offices.map((o) => (
           <div className={s.col} key={o.city}>

@@ -1,7 +1,9 @@
 .section {
   position: relative;
-  /* Extra height is the scroll budget the pinned reveal is scrubbed against. */
-  height: 260vh;
+  /* Extra height is the scroll budget the pinned reveal is scrubbed against.
+     Tuned so the headline finishes resolving with a beat to spare, not so the
+     visitor waits out an empty pin. */
+  height: 210vh;
 }
 
 .sticky {
@@ -96,6 +98,6 @@
 }
 
 @media (max-width: 800px) {
-  .section { height: 220vh; }
+  .section { height: 190vh; }
   .body { margin-left: 0; }
 }

@@ -327,7 +327,7 @@ export default function Gallery() {
   const item = GALLERY[index];
 
   return (
-    <section className={s.section} ref={root} data-ambient="0.6">
+    <section className={s.section} ref={root} data-ambient="0.38">
       <div className="u-shell">
         <div className="u-head">
           <h2 className="u-title">

@@ -81,7 +81,7 @@ export default function Statement() {
   }, [reduced]);
 
   return (
-    <section className={s.section} ref={root} data-ambient="0.95">
+    <section className={s.section} ref={root} data-ambient="0.68">
       <div className={`${s.inner} u-shell`}>
         <p className={`${s.label} u-label u-label--accent`}>{STATEMENT.small}</p>
 

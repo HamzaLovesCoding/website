@@ -75,7 +75,7 @@ export default function Atmosphere() {
           onToggle: (self) => {
             root.current?.style.setProperty(
               '--ambient',
-              String(self.isActive ? to : 0.42),
+              String(self.isActive ? to : 0.28),
             );
           },
         });

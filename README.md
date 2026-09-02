@@ -9,9 +9,10 @@ in real content should not require touching a component.
 
 ```bash
 npm install
-npm run dev     # http://localhost:3000
+npm run dev      # http://localhost:3000
 npm run build
-npm run media   # regenerate the placeholder imagery
+npm run media    # regenerate the placeholder imagery
+npm run preview  # build the single-file preview (see below)
 ```
 
 ## Stack
@@ -26,6 +27,29 @@ npm run media   # regenerate the placeholder imagery
 
 There is no UI framework and no animation-preset library. Every transition is
 written for the place it appears.
+
+## Standalone preview
+
+`npm run preview` writes `preview/index.html` — the whole site as one
+self-contained file, for opening somewhere a Node server can't run.
+
+It is a static export, not a second codebase. The build script reads the real
+stylesheet, the real GLSL and the real copy out of `styles/`, `lib/shaders/`
+and `lib/content.ts`, inlines the next/font faces that `next build` already
+downloaded, and base64s the imagery. The only thing written twice is the motion
+orchestration, in `preview/app.js`, rewritten against the DOM instead of React.
+
+Two deliberate differences from the app:
+
+- **Raw WebGL instead of Three.js.** Both surfaces are one quad with a fragment
+  shader; Three would have been 400KB of inlined library for a scene graph
+  neither uses. The GLSL itself is the app's, verbatim.
+- **Libraries inlined rather than loaded from a CDN**, so the file works with
+  no network at all.
+
+Because the CSS and layout come from the same source, the export lays out
+identically — same page height to the pixel. Regenerate it after changing
+anything in `styles/`, `lib/` or the components' CSS modules.
 
 ## Design system
 
@@ -55,8 +79,19 @@ CSS Modules.
 | `Statement` | The loudest typographic moment — character reveals from alternating directions, and the page's one scramble |
 | `Journal` / `Cta` / `Footer` | Editorial list, magnetic button, and a giant wordmark lit by the cursor |
 
-Section lengths are set in `vh` at the top of each module (`Manifesto` 260vh,
-`Expand` 300vh, `Process` 340vh). Those are the pacing dials.
+Section lengths are the pacing dials, set in `vh` at the top of each module
+(`Manifesto` 210vh, `Expand` 240vh) and by the card height in `Work` (92svh
+each). `Process` is the exception: its height is measured from the rail at
+runtime, so it is exactly as long as the rail has to travel and adding a card
+re-paces it automatically.
+
+The loader runs for ~1.5s and only once per tab — a `sessionStorage` flag
+skips it on the way back, so it stays an introduction rather than a toll booth.
+
+Ambient intensity is curved deliberately across the page: bright at the hero,
+pulled well back through the work and capability sections so the accent reads
+as an accent, and brightest at the CTA. Each section's `data-ambient` value is
+its position on that curve.
 
 ## Interaction
 

@@ -7,7 +7,7 @@
   pointer-events: none;
   overflow: hidden;
   /* Scrubbed by ScrollTrigger — sections marked data-ambient push it up. */
-  opacity: var(--ambient, 0.5);
+  opacity: var(--ambient, 0.32);
   transition: opacity 0.6s linear;
 }
 

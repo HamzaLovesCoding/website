@@ -73,7 +73,7 @@ export default function Expand() {
   }, [reduced]);
 
   return (
-    <section className={s.section} ref={root} data-ambient="0.7">
+    <section className={s.section} ref={root} data-ambient="0.5">
       <div className={s.sticky}>
         <h2 className={s.word} aria-label="Selected work">
           Work

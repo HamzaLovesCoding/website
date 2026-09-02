@@ -1,8 +1,10 @@
 .section {
   position: relative;
   z-index: 2;
-  /* Vertical budget that gets converted into horizontal travel. */
-  height: 340vh;
+  /* Placeholder budget only. The real height is measured from the rail at
+     runtime (see Process.tsx) — a fixed value leaves however much dead scroll
+     is left over once the rail has finished travelling. */
+  height: 220vh;
 }
 
 .sticky {

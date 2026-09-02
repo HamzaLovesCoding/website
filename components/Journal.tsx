@@ -26,7 +26,7 @@ export default function Journal() {
   }, [reduced]);
 
   return (
-    <section className={s.section} ref={root} id="journal" data-ambient="0.4">
+    <section className={s.section} ref={root} id="journal" data-ambient="0.24">
       <div className="u-shell">
         <div className="u-head">
           <h2 className="u-title">

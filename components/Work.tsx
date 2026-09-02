@@ -121,7 +121,7 @@ export default function Work() {
   }, [reduced, precise]);
 
   return (
-    <section className={s.section} ref={root} id="work" data-ambient="0.45">
+    <section className={s.section} ref={root} id="work" data-ambient="0.28">
       <div className={`${s.head} u-shell u-head`}>
         <h2 className="u-title">
           Selected <em>work</em>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { gsap } from '@/lib/gsap';
 import { useReducedMotion } from '@/lib/hooks';
@@ -96,7 +96,7 @@ export default function Manifesto() {
   }, [reduced]);
 
   return (
-    <section className={s.section} ref={root} id="studio" data-ambient="0.55">
+    <section className={s.section} ref={root} id="studio" data-ambient="0.4">
       <div className={s.sticky}>
         <div className={s.plate} aria-hidden="true">
           <Image

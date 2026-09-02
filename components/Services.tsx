@@ -120,7 +120,7 @@ export default function Services() {
   }, [precise, reduced]);
 
   return (
-    <section className={s.section} ref={root} id="services" data-ambient="0.5">
+    <section className={s.section} ref={root} id="services" data-ambient="0.3">
       <div className="u-shell">
         <div className="u-head">
           <h2 className="u-title">

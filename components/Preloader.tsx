@@ -9,12 +9,33 @@ import { useReducedMotion } from '@/lib/hooks';
 import { SITE } from '@/lib/content';
 import s from './Preloader.module.css';
 
+/** Per-tab flag: the loader is an introduction, not a toll booth. */
+const SEEN = 'vm:seen';
+
+const alreadySeen = () => {
+  try {
+    return sessionStorage.getItem(SEEN) === '1';
+  } catch {
+    // Private mode, blocked storage — treat as a first visit.
+    return false;
+  }
+};
+
+const markSeen = () => {
+  try {
+    sessionStorage.setItem(SEEN, '1');
+  } catch {
+    /* nothing to do */
+  }
+};
+
 /**
- * The first two seconds of the site.
+ * The first moment of the site.
  *
  * It exists to buy the fonts and the first images time to land — a hero that
  * reflows its headline after paint undoes the whole impression — and to make
- * that wait feel authored.
+ * that wait feel authored. It is deliberately short, and it only runs once per
+ * tab: on a second visit the hero should just be there.
  */
 export default function Preloader() {
   const root = useRef<HTMLDivElement>(null);
@@ -31,13 +52,14 @@ export default function Preloader() {
     lockScroll();
 
     const ctx = gsap.context(() => {
-      if (reduced) {
+      if (reduced || alreadySeen()) {
         setDone(true);
         gsap.set(root.current, { autoAlpha: 0 });
         unlockScroll();
         introDone();
         return;
       }
+      markSeen();
 
       const state = { v: 0 };
       const tl = gsap.timeline();
@@ -47,7 +69,7 @@ export default function Preloader() {
           state,
           {
             v: 100,
-            duration: 2.05,
+            duration: 1.45,
             // Not linear: a counter that hesitates and then rushes reads as
             // something actually loading.
             ease: 'power2.inOut',
@@ -59,22 +81,22 @@ export default function Preloader() {
           },
           0,
         )
-        .to(`.${s.barFill}`, { scaleX: 1, duration: 2.05, ease: 'power2.inOut' }, 0);
+        .to(`.${s.barFill}`, { scaleX: 1, duration: 1.45, ease: 'power2.inOut' }, 0);
 
-      if (word.current) tl.add(scramble(word.current, { duration: 1.5 }), 0.25);
+      if (word.current) tl.add(scramble(word.current, { duration: 1.15 }), 0.2);
 
       // Exit: the loader lifts as a plate and the counter leaves ahead of it.
       tl.to(`.${s.inner}`, {
         yPercent: -110,
         opacity: 0,
-        duration: 0.9,
+        duration: 0.8,
         ease: 'power3.inOut',
       })
         .to(
           root.current,
           {
             clipPath: 'inset(0 0 100% 0)',
-            duration: 1.15,
+            duration: 1.05,
             ease: 'power4.inOut',
             onStart: () => {
               unlockScroll();

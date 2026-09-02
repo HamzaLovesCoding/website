@@ -84,7 +84,7 @@ export default function Hero() {
   }, [reduced]);
 
   return (
-    <section className={s.hero} ref={root} data-ambient="0.85" id="top">
+    <section className={s.hero} ref={root} data-ambient="0.8" id="top">
       {webgl === false ? (
         <div className={s.fallback} aria-hidden="true" />
       ) : (
