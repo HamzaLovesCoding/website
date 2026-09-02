@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { gsap } from '@/lib/gsap';
 import { split } from '@/lib/split';
 import { usePrecisePointer, useReducedMotion } from '@/lib/hooks';
-import { PROJECTS } from '@/lib/content';
+import { PROGRAM } from '@/lib/content';
+import Em from './Em';
 import s from './Work.module.css';
 
 export default function Work() {
@@ -121,25 +122,24 @@ export default function Work() {
   }, [reduced, precise]);
 
   return (
-    <section className={s.section} ref={root} id="work" data-ambient="0.28">
+    <section className={s.section} ref={root} id="what" data-ambient="0.28">
       <div className={`${s.head} u-shell u-head`}>
         <h2 className="u-title">
-          Selected <em>work</em>
+          <Em phrase={PROGRAM.title} />
         </h2>
-        <span className="u-label">
-          [LABEL] {PROJECTS.length} projects — index
-        </span>
+        <span className="u-label">{PROGRAM.meta}</span>
       </div>
 
       <div className={`${s.list} u-shell`}>
-        {PROJECTS.map((p) => (
+        {PROGRAM.items.map((p) => (
           <article className={s.card} key={p.index}>
             <div className={s.inner}>
               <div className={s.mediaWrap}>
                 <Image
                   className={s.media}
                   src={p.image}
-                  alt={`${p.title} — ${p.discipline}`}
+                  alt=""
+                  aria-hidden="true"
                   fill
                   sizes="(max-width: 1200px) 100vw, 1600px"
                   quality={80}
@@ -147,28 +147,20 @@ export default function Work() {
               </div>
               <div className={s.veil} aria-hidden="true" />
 
-              <a
-                className={s.link}
-                href="#work"
-                aria-label={`View ${p.title}`}
-                data-cursor="view"
-                data-cursor-label="View"
-              />
-
               <div className={s.content}>
                 <div className={s.topRow}>
                   <span className={s.index}>{p.index}</span>
-                  <span className="u-label">{p.client}</span>
+                  <span className="u-label">{p.kicker}</span>
                 </div>
 
                 <div>
                   <span className={s.rule} aria-hidden="true" />
                   <div className={s.bottomRow}>
-                    <h3 className={`${s.title} u-display`}>{p.title}</h3>
-                    <div className={s.meta}>
-                      <span className={s.metaLine}>{p.discipline}</span>
-                      <span className="u-label">{p.year}</span>
+                    <div className={s.headline}>
+                      <h3 className={`${s.title} u-display`}>{p.title}</h3>
+                      <p className={s.blurb}>{p.blurb}</p>
                     </div>
+                    <span className="u-label">{p.tag}</span>
                   </div>
                 </div>
               </div>

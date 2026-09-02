@@ -28,6 +28,9 @@
       </div>
     </div>`;
 
+  /** {lead, em, tail} -> markup, mirroring components/Em.tsx. */
+  const em = (p) => `${p.lead}<em>${p.em}</em>${p.tail}`;
+
   const mask = (inner, attr = '') =>
     `<span class="u-mask"><span style="display:block" ${attr}>${inner}</span></span>`;
 
@@ -64,15 +67,15 @@
   <!-- header -------------------------------------------------------------->
   <header class="header-header u-shell" data-header data-open="false">
     <a class="header-mark" href="#top" data-jump="#top">
-      <span data-glitch>${C.SITE.name}</span><sup>&reg;</sup>
+      <span data-glitch>${C.SITE.markLead}</span><span class="header-markSup">${C.SITE.markSup}</span>
     </a>
     <nav class="header-nav" aria-label="Primary">
       ${C.NAV.slice(0, 4).map((n) =>
         `<a class="header-link" href="${n.href}" data-jump="${n.href}">${n.label}</a>`).join('')}
     </nav>
     <div class="header-right">
-      <a class="header-cta" href="#contact" data-jump="#contact" data-cursor="link" data-magnetic="0.28" data-magnetic-inner=".header-ctaLabel">
-        <span class="header-dot"></span><span class="header-ctaLabel">${C.CTA.button}</span>
+      <a class="header-cta" href="#join" data-jump="#join" data-cursor="link" data-magnetic="0.28" data-magnetic-inner=".header-ctaLabel">
+        <span class="header-dot"></span><span class="header-ctaLabel">${C.JOIN.button}</span>
       </a>
       <button class="header-burger" data-menu-toggle aria-label="Open menu" aria-expanded="false" data-cursor="link" data-magnetic="0.4" data-magnetic-radius="30">
         <span class="header-burgerBars" data-burger><span></span><span></span></span>
@@ -96,19 +99,19 @@
           </div>`).join('')}
       </nav>
       <div class="menu-aside">
-        ${C.FOOTER.offices.map((o) => `
+        ${C.FOOTER.columns.map((c) => `
           <div class="menu-col">
-            <span class="u-label">${o.city}</span>
-            <span class="menu-colBody">${o.line1}<br>${o.line2}</span>
+            <span class="u-label">${c.label}</span>
+            <span class="menu-colBody">${c.lines.join('<br>')}</span>
           </div>`).join('')}
         <div class="menu-col">
-          <span class="u-label">Follow</span>
+          <span class="u-label">${C.FOOTER.followLabel}</span>
           <div class="menu-socials">
             ${C.FOOTER.socials.map((x) => `<a class="menu-social" href="#" tabindex="-1">${x}</a>`).join('')}
           </div>
         </div>
         <div class="menu-col">
-          <span class="u-label">${C.SITE.year}</span>
+          <span class="u-label">${C.SITE.school}</span>
           <span class="menu-colBody">${C.SITE.tagline}</span>
         </div>
       </div>
@@ -142,26 +145,26 @@
         </div>
       </div>
       <div class="hero-clients">
-        ${marquee('', C.CLIENTS.map((c) => `<span class="hero-client">${c}</span>`).join(''), 44)}
+        ${marquee('', C.TOPICS.map((t) => `<span class="hero-client">${t}</span>`).join(''), 44)}
       </div>
     </section>
 
     <!-- manifesto --------------------------------------------------------->
-    <section class="manifesto-section" id="studio" data-ambient="0.4">
+    <section class="manifesto-section" id="about" data-ambient="0.4">
       <div class="manifesto-sticky">
         <div class="manifesto-plate" aria-hidden="true">
           <img class="manifesto-plateImg" src="${media('/media/plate-wide.jpg')}" alt="">
         </div>
         <div class="manifesto-plateVeil" aria-hidden="true"></div>
         <div class="manifesto-inner u-shell">
-          <p class="manifesto-label u-label u-label--accent">${C.MANIFESTO.label}</p>
+          <p class="manifesto-label u-label u-label--accent">${C.ABOUT.label}</p>
           <h2 class="manifesto-heading">
-            ${C.MANIFESTO.heading.split(' ').map((w) =>
+            ${C.ABOUT.heading.split(' ').map((w) =>
               `<span class="manifesto-word">${w}</span>`).join(' ')}
           </h2>
-          <p class="manifesto-body">${C.MANIFESTO.body}</p>
+          <p class="manifesto-body">${C.ABOUT.body}</p>
           <div class="manifesto-stats">
-            ${C.MANIFESTO.stats.map((s) => `
+            ${C.ABOUT.stats.map((s) => `
               <div class="manifesto-stat">
                 <span class="manifesto-statN" data-count="${s.n}">0</span>
                 <span class="u-label">${s.l}</span>
@@ -174,51 +177,50 @@
     <!-- expand ------------------------------------------------------------>
     <section class="expand-section" data-ambient="0.5">
       <div class="expand-sticky">
-        <h2 class="expand-word">Work</h2>
+        <h2 class="expand-word">${C.HINGE.word}</h2>
         <div class="expand-wordSub" aria-hidden="true">
-          <span class="u-label">[LABEL] Selected output</span>
-          <span class="u-label">2024 &mdash; 2026</span>
+          <span class="u-label">${C.HINGE.labelLeft}</span>
+          <span class="u-label">${C.HINGE.labelRight}</span>
         </div>
         <div class="expand-frame">
-          <img class="expand-frameMedia" src="${media('/media/work-01.jpg')}" alt="">
+          <img class="expand-frameMedia" src="${media(C.PROGRAM.items[0].image)}" alt="">
           <div class="expand-frameVeil" aria-hidden="true"></div>
         </div>
         <div class="expand-caption">
-          <p class="expand-captionTitle">[PROJECT] Six years of work <em>for</em> people who ship.</p>
-          <span class="u-label">[LABEL] Scroll for the index</span>
+          <p class="expand-captionTitle">${em(C.HINGE.caption)}</p>
+          <span class="u-label">${C.HINGE.labelLeft}</span>
         </div>
-        <div class="expand-tick"><span class="u-label u-label--accent">01 / 06</span></div>
+        <div class="expand-tick"><span class="u-label u-label--accent">${C.HINGE.tick}</span></div>
       </div>
     </section>
 
     <!-- work -------------------------------------------------------------->
-    <section class="work-section" id="work" data-ambient="0.28">
+    <section class="work-section" id="what" data-ambient="0.28">
       <div class="work-head u-shell u-head">
-        <h2 class="u-title">Selected <em>work</em></h2>
-        <span class="u-label">[LABEL] ${C.PROJECTS.length} projects &mdash; index</span>
+        <h2 class="u-title">${em(C.PROGRAM.title)}</h2>
+        <span class="u-label">${C.PROGRAM.meta}</span>
       </div>
       <div class="work-list u-shell">
-        ${C.PROJECTS.map((p) => `
+        ${C.PROGRAM.items.map((p) => `
           <article class="work-card">
             <div class="work-inner">
               <div class="work-mediaWrap">
-                <img class="work-media" src="${media(p.image)}" alt="${p.title}">
+                <img class="work-media" src="${media(p.image)}" alt="" aria-hidden="true">
               </div>
               <div class="work-veil" aria-hidden="true"></div>
-              <a class="work-link" href="#work" aria-label="View ${p.title}" data-cursor="view" data-cursor-label="View"></a>
               <div class="work-content">
                 <div class="work-topRow">
                   <span class="work-index">${p.index}</span>
-                  <span class="u-label">${p.client}</span>
+                  <span class="u-label">${p.kicker}</span>
                 </div>
                 <div>
                   <span class="work-rule"></span>
                   <div class="work-bottomRow">
-                    <h3 class="work-title u-display">${p.title}</h3>
-                    <div class="work-meta">
-                      <span class="work-metaLine">${p.discipline}</span>
-                      <span class="u-label">${p.year}</span>
+                    <div class="work-headline">
+                      <h3 class="work-title u-display">${p.title}</h3>
+                      <p class="work-blurb">${p.blurb}</p>
                     </div>
+                    <span class="u-label">${p.tag}</span>
                   </div>
                 </div>
               </div>
@@ -228,46 +230,46 @@
     </section>
 
     <!-- gallery ----------------------------------------------------------->
-    <section class="gallery-section" data-ambient="0.38">
+    <section class="gallery-section" id="inside" data-ambient="0.38">
       <div class="u-shell">
         <div class="u-head">
-          <h2 class="u-title">Featured <em>work</em></h2>
-          <span class="u-label">[LABEL] Drag or hover to distort</span>
+          <h2 class="u-title">${em(C.INSIDE.title)}</h2>
+          <span class="u-label">${C.INSIDE.meta}</span>
         </div>
         <div class="gallery-grid">
           <div class="gallery-col">
-            <h3 class="gallery-title" data-gallery-title>${C.GALLERY[0].title}</h3>
+            <h3 class="gallery-title" data-gallery-title>${C.INSIDE.items[0].title}</h3>
             <div class="gallery-metaRow">
-              <span class="gallery-count"><span data-gallery-n>01</span><span class="gallery-countTotal"> / 0${C.GALLERY.length}</span></span>
+              <span class="gallery-count"><span data-gallery-n>01</span><span class="gallery-countTotal"> / 0${C.INSIDE.items.length}</span></span>
               <span class="gallery-progress"><span class="gallery-progressFill"></span></span>
             </div>
-            <span class="u-label" data-gallery-meta>${C.GALLERY[0].meta}</span>
+            <span class="u-label" data-gallery-meta>${C.INSIDE.items[0].meta}</span>
             <div class="gallery-controls">
               <button class="gallery-ctrl" data-gallery-prev aria-label="Previous project">&larr;</button>
               <button class="gallery-ctrl" data-gallery-next aria-label="Next project">&rarr;</button>
             </div>
             <div class="gallery-dots" aria-hidden="true">
-              ${C.GALLERY.map((g, i) => `<span class="gallery-dot" data-on="${i === 0}"></span>`).join('')}
+              ${C.INSIDE.items.map((g, i) => `<span class="gallery-dot" data-on="${i === 0}"></span>`).join('')}
             </div>
           </div>
           <div class="gallery-stage" data-gallery-stage data-cursor="drag" data-cursor-label="Drag">
             <span class="gallery-stageEdge" aria-hidden="true"></span>
-            <span class="gallery-stageTag u-label" data-gallery-tag>${C.GALLERY[0].meta}</span>
+            <span class="gallery-stageTag u-label" data-gallery-tag>${C.INSIDE.items[0].meta}</span>
           </div>
         </div>
       </div>
     </section>
 
     <!-- services ---------------------------------------------------------->
-    <section class="services-section" id="services" data-ambient="0.3">
+    <section class="services-section" id="focus" data-ambient="0.3">
       <div class="u-shell">
         <div class="u-head">
-          <h2 class="u-title">All the ways we <em>move</em> brands</h2>
-          <span class="u-label">[LABEL] Capabilities</span>
+          <h2 class="u-title">${em(C.FOCUS.title)}</h2>
+          <span class="u-label">${C.FOCUS.label}</span>
         </div>
-        <p class="services-intro">[DESCRIPTION] Four practices, one team. Most projects use more than one &mdash; the handoffs are where the work usually goes wrong, so we removed them.</p>
+        <p class="services-intro">${C.FOCUS.intro}</p>
         <div class="services-list">
-          ${C.SERVICES.map((sv) => `
+          ${C.FOCUS.items.map((sv) => `
             <div class="services-row" data-service-row data-on="false">
               <div class="services-strip" aria-hidden="true">
                 ${marquee('', Array.from({ length: 4 }).map(() =>
@@ -289,15 +291,15 @@
     </section>
 
     <!-- process ----------------------------------------------------------->
-    <section class="process-section" data-ambient="0.36">
+    <section class="process-section" id="year" data-ambient="0.36">
       <div class="process-sticky">
         <div class="process-rail" data-rail>
           <div class="process-lead">
-            <span class="u-label u-label--accent">[LABEL] How we work</span>
-            <h2 class="process-leadTitle">Five steps, <em>no</em> surprises.</h2>
-            <p class="process-leadBody">[DESCRIPTION] The same shape every time, whether it is a six-week sprint or a two-year platform.</p>
+            <span class="u-label u-label--accent">${C.YEAR.label}</span>
+            <h2 class="process-leadTitle">${em(C.YEAR.title)}</h2>
+            <p class="process-leadBody">${C.YEAR.body}</p>
           </div>
-          ${C.PROCESS.map((p) => `
+          ${C.YEAR.steps.map((p) => `
             <article class="process-card">
               <span class="process-cardIndex">${p.index}</span>
               <div>
@@ -309,7 +311,7 @@
         <div class="process-progress" aria-hidden="true">
           <span class="u-label">01</span>
           <span class="process-bar"><span class="process-barFill"></span></span>
-          <span class="u-label">0${C.PROCESS.length}</span>
+          <span class="u-label">0${C.YEAR.steps.length}</span>
         </div>
       </div>
     </section>
@@ -317,47 +319,44 @@
     <!-- statement --------------------------------------------------------->
     <section class="statement-section" data-ambient="0.68">
       <div class="statement-inner u-shell">
-        <p class="statement-label u-label u-label--accent">${C.STATEMENT.small}</p>
+        <p class="statement-label u-label u-label--accent">${C.WHY.label}</p>
         <div class="statement-lines">
-          ${C.STATEMENT.lines.map((l) => `<span class="statement-line">${l}</span>`).join('')}
+          ${C.WHY.lines.map((l) => `<span class="statement-line">${l}</span>`).join('')}
         </div>
-        <p class="statement-glitch" data-text="[DESCRIPTION] Independent since 2016. Forty-one people across two studios, one shared standard for what counts as finished.">[DESCRIPTION] Independent since 2016. Forty-one people across two studios, one shared standard for what counts as finished.</p>
+        <p class="statement-glitch" data-text="${C.WHY.note}">${C.WHY.note}</p>
       </div>
     </section>
 
-    <!-- journal ----------------------------------------------------------->
-    <section class="journal-section" id="journal" data-ambient="0.24">
+    <!-- faq --------------------------------------------------------------->
+    <section class="faq-section" id="faq" data-ambient="0.24">
       <div class="u-shell">
         <div class="u-head">
-          <h2 class="u-title">From the <em>journal</em></h2>
-          <span class="u-label">[LABEL] Notes &amp; opinions</span>
+          <h2 class="u-title">${em(C.FAQ.title)}</h2>
+          <span class="u-label">${C.FAQ.label}</span>
         </div>
-        <div class="journal-list">
-          ${C.JOURNAL.map((j) => `
-            <a class="journal-row" href="#journal" data-cursor="link">
-              <span class="journal-index">${j.index}</span>
-              <h3 class="journal-title">${j.title}</h3>
-              <span class="journal-side">
-                <span class="u-label">${j.cat}</span><span class="u-label">${j.date}</span>
-              </span>
-              <span class="journal-arrow">&#8599;</span>
-            </a>`).join('')}
-        </div>
+        <dl class="faq-list">
+          ${C.FAQ.items.map((f) => `
+            <div class="faq-row">
+              <span class="faq-index" aria-hidden="true">${f.index}</span>
+              <dt class="faq-question">${f.q}</dt>
+              <dd class="faq-answer">${f.a}</dd>
+            </div>`).join('')}
+        </dl>
       </div>
     </section>
 
     <!-- cta --------------------------------------------------------------->
-    <section class="cta-section" id="contact" data-ambient="1">
+    <section class="cta-section" id="join" data-ambient="1">
       <div class="cta-glow" aria-hidden="true"></div>
       <div class="cta-inner u-shell">
         <h2 class="cta-headline">
-          ${mask(`<span class="cta-dim">${C.CTA.headline.lead} </span><em>${C.CTA.headline.em}</em>${C.CTA.headline.tail}`, 'data-cta-line')}
-          ${mask(`${C.CTA.second.lead} <em>${C.CTA.second.em}</em> ${C.CTA.second.tail}`, 'data-cta-line')}
+          ${mask(`<span class="cta-dim">${C.JOIN.headline.lead} </span><em>${C.JOIN.headline.em}</em>${C.JOIN.headline.tail}`, 'data-cta-line')}
+          ${mask(`${C.JOIN.second.lead} <em>${C.JOIN.second.em}</em> ${C.JOIN.second.tail}`, 'data-cta-line')}
         </h2>
         <div class="cta-foot">
-          <p class="cta-note">${C.CTA.note}</p>
-          <a class="cta-button" href="mailto:hello@example.com" data-cursor="link" data-magnetic="0.4" data-magnetic-radius="90" data-magnetic-inner=".cta-buttonLabel">
-            <span class="cta-buttonLabel">${C.CTA.button}</span>
+          <p class="cta-note">${C.JOIN.note}</p>
+          <a class="cta-button" href="mailto:${C.JOIN.email}" data-cursor="link" data-magnetic="0.4" data-magnetic-radius="90" data-magnetic-inner=".cta-buttonLabel">
+            <span class="cta-buttonLabel">${C.JOIN.button}</span>
             <span class="cta-buttonArrow">&#8599;</span>
           </a>
         </div>
@@ -368,25 +367,26 @@
   <!-- footer -------------------------------------------------------------->
   <footer class="footer-footer" data-ambient="0.6">
     <div class="footer-top u-shell">
-      ${C.FOOTER.offices.map((o) => `
+      ${C.FOOTER.columns.map((c) => `
         <div class="footer-col">
-          <span class="u-label">${o.city}</span>
-          <span class="footer-colBody">${o.line1}<br>${o.line2}</span>
+          <span class="u-label">${c.label}</span>
+          <span class="footer-colBody">${c.lines.join('<br>')}</span>
         </div>`).join('')}
       <div class="footer-col">
-        <span class="u-label">Follow</span>
+        <span class="u-label">${C.FOOTER.followLabel}</span>
         <div class="footer-stack">
           ${C.FOOTER.socials.map((x) => `<a class="footer-item" href="#">${x}</a>`).join('')}
         </div>
       </div>
       <div class="footer-col">
-        <span class="u-label">Newsletter</span>
-        <span class="footer-colBody">[DESCRIPTION] One email a quarter. Work, notes, nothing else.</span>
-        <a class="footer-item" href="mailto:hello@example.com">Subscribe &#8599;</a>
+        <span class="u-label">${C.FOOTER.noteLabel}</span>
+        <span class="footer-colBody">${C.FOOTER.note}</span>
+        <a class="footer-item" href="#">${C.FOOTER.noteCta} &#8599;</a>
       </div>
     </div>
 
-    <div class="footer-markWrap" data-mark data-cursor="view" data-cursor-label="Hello">
+    <div class="footer-markWrap" data-mark data-cursor="view" data-cursor-label="Hello"
+         style="--mark-len:${Array.from(C.SITE.wordmark).length}">
       <div class="footer-mark" role="img" aria-label="${C.SITE.wordmark}">
         ${['footer-layerBase', 'footer-layerAccent', 'footer-layerHot'].map((layer) => `
           <div class="footer-layer ${layer}" aria-hidden="true">
@@ -397,10 +397,8 @@
     </div>
 
     <div class="footer-bottom u-shell">
-      <span class="u-label">${C.SITE.year} ${C.SITE.name} &mdash; ${C.SITE.tagline}</span>
-      <div class="footer-legal">
-        ${C.FOOTER.legal.map((l) => `<a class="footer-item u-label" href="#">${l}</a>`).join('')}
-      </div>
+      <span class="u-label">${C.SITE.name} &mdash; ${C.SITE.school}</span>
+      <span class="u-label">${C.SITE.year}</span>
       <button class="footer-toTop" data-jump="#top" data-cursor="link">Back to top &uarr;</button>
     </div>
   </footer>`;
@@ -754,13 +752,13 @@
     let index = 0;
 
     const paint = () => {
-      $('[data-gallery-title]').textContent = C.GALLERY[index].title;
-      $('[data-gallery-meta]').textContent = C.GALLERY[index].meta;
-      $('[data-gallery-tag]').textContent = C.GALLERY[index].meta;
+      $('[data-gallery-title]').textContent = C.INSIDE.items[index].title;
+      $('[data-gallery-meta]').textContent = C.INSIDE.items[index].meta;
+      $('[data-gallery-tag]').textContent = C.INSIDE.items[index].meta;
       $('[data-gallery-n]').textContent = String(index + 1).padStart(2, '0');
       $$('.gallery-dot').forEach((d, i) => d.dataset.on = String(i === index));
       gsap.to('.gallery-progressFill', {
-        scaleX: (index + 1) / C.GALLERY.length, duration: 0.9, ease: 'expo.out',
+        scaleX: (index + 1) / C.INSIDE.items.length, duration: 0.9, ease: 'expo.out',
       });
       if (!reduced) {
         gsap.fromTo('[data-gallery-title]',
@@ -771,7 +769,7 @@
 
     if (g) {
       (async () => {
-        const imgs = await Promise.all(C.GALLERY.map((x) => loadImage(media(x.image))));
+        const imgs = await Promise.all(C.INSIDE.items.map((x) => loadImage(media(x.image))));
         const disp = await loadImage(media('/media/displacement.jpg'));
         const texes = imgs.map((i) => g.makeTexture(i));
         const dispTex = g.makeTexture(disp);
@@ -781,7 +779,7 @@
         let from = 0, to = 0, tween = null;
 
         const advance = (next) => {
-          next = (next + C.GALLERY.length) % C.GALLERY.length;
+          next = (next + C.INSIDE.items.length) % C.INSIDE.items.length;
           if (next === to) return;
           tween?.kill();
           from = to; to = next; index = next;
@@ -858,7 +856,7 @@
       })();
     } else {
       // Cross-fade fallback, same crop and rhythm.
-      C.GALLERY.forEach((x, i) => {
+      C.INSIDE.items.forEach((x, i) => {
         const im = document.createElement('img');
         im.className = 'gallery-fallbackImg';
         im.src = media(x.image);
@@ -866,7 +864,7 @@
         stage.prepend(im);
       });
       const advance = (n) => {
-        index = (n + C.GALLERY.length) % C.GALLERY.length;
+        index = (n + C.INSIDE.items.length) % C.INSIDE.items.length;
         $$('.gallery-fallbackImg').forEach((el, i) => el.dataset.on = String(i === index));
         paint();
       };
@@ -1401,12 +1399,12 @@
     });
   }
 
-  /* ------------------------------------------------------------ journal --- */
+  /* ---------------------------------------------------------------- faq --- */
 
   if (!reduced) {
-    gsap.from('.journal-row', {
-      yPercent: 30, opacity: 0, duration: 1.1, stagger: 0.09, ease: 'expo.out',
-      scrollTrigger: { trigger: '.journal-list', start: 'top 85%' },
+    gsap.from('.faq-row', {
+      yPercent: 22, opacity: 0, duration: 1.1, stagger: 0.08, ease: 'expo.out',
+      scrollTrigger: { trigger: '.faq-list', start: 'top 85%' },
     });
   }
 

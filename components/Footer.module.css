@@ -80,7 +80,9 @@
    turns the cursor into a light being carried across the type. */
 .layer {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 18.6vw, 19rem);
+  /* Sized against the character count so any wordmark fills the band without
+     overflowing it — `--mark-len` is set from the content in Footer.tsx. */
+  font-size: clamp(2.5rem, min(18.6vw, 168vw / var(--mark-len, 12)), 19rem);
   line-height: 0.86;
   letter-spacing: -0.042em;
   white-space: nowrap;

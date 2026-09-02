@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { gsap } from '@/lib/gsap';
 import { lockScroll, scrollTo, unlockScroll } from '@/lib/smooth';
@@ -214,19 +214,22 @@ export default function Menu({ open, onClose }: Props) {
         </nav>
 
         <div className={s.aside}>
-          {FOOTER.offices.map((o) => (
-            <div className={s.col} key={o.city}>
-              <span className="u-label">{o.city}</span>
+          {FOOTER.columns.map((c) => (
+            <div className={s.col} key={c.label}>
+              <span className="u-label">{c.label}</span>
               <span className={s.colBody}>
-                {o.line1}
-                <br />
-                {o.line2}
+                {c.lines.map((line, i) => (
+                  <Fragment key={line}>
+                    {i > 0 ? <br /> : null}
+                    {line}
+                  </Fragment>
+                ))}
               </span>
             </div>
           ))}
 
           <div className={s.col}>
-            <span className="u-label">Follow</span>
+            <span className="u-label">{FOOTER.followLabel}</span>
             <div className={s.socials}>
               {FOOTER.socials.map((x) => (
                 <a className={s.social} key={x} href="#" tabIndex={open ? 0 : -1}>
@@ -237,7 +240,7 @@ export default function Menu({ open, onClose }: Props) {
           </div>
 
           <div className={s.col}>
-            <span className="u-label">{SITE.year}</span>
+            <span className="u-label">{SITE.school}</span>
             <span className={s.colBody}>{SITE.tagline}</span>
           </div>
         </div>

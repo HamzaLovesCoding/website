@@ -26,16 +26,15 @@ const mono = JetBrains_Mono({
   variable: '--font-code',
 });
 
+const TITLE = 'Business Entrepreneurship Club — San Marin High School';
+const DESCRIPTION =
+  'A student-run club for anyone who wants to build something real. Guest speakers, AI as a business tool, pitch practice and a flagship hackathon — no experience required.';
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://example.com'),
-  title: 'Vivid Motion — Creative studio built for growth',
-  description:
-    'Independent design and technology studio. Strategy, creative and development for brands that need to move.',
-  openGraph: {
-    title: 'Vivid Motion — Creative studio built for growth',
-    description: 'Independent design and technology studio.',
-    type: 'website',
-  },
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: { title: TITLE, description: DESCRIPTION, type: 'website' },
 };
 
 export const viewport: Viewport = {

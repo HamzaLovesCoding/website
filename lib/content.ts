@@ -1,149 +1,257 @@
 /**
  * Every string and asset path on the page lives here.
  *
- * The build phase is about the visual system, so this is deliberately
- * placeholder copy — swapping in real content should mean editing this file
- * and nothing else.
+ * Nothing else in the project hardcodes copy, so changing what the site says
+ * means editing this file and nothing else.
+ *
+ * Anything in [SQUARE BRACKETS] is a placeholder that still needs a real
+ * value — meeting times, room numbers, contact details and photos.
  */
 
+/**
+ * A phrase with exactly one italicised span. Rendering these as data rather
+ * than as HTML strings keeps the content file free of markup.
+ */
+export type Phrase = { lead: string; em: string; tail: string };
+
 export const SITE = {
-  name: 'Vivid Motion',
-  wordmark: 'Vivid Motion',
-  tagline: '[TAGLINE] Independent design & technology studio',
-  year: '©2026',
+  name: 'Business Entrepreneurship Club',
+  /** Header mark, split so "Club" can sit small next to the long name. */
+  markLead: 'Business Entrepreneurship',
+  markSup: 'Club',
+  /** Oversized footer mark. Short is better — it is set at ~19rem. */
+  wordmark: 'BEC',
+  school: 'San Marin High School',
+  tagline: 'A student-run club at San Marin High School',
+  year: '2026',
 };
 
 export const NAV = [
-  { label: 'Work', href: '#work', index: '01', preview: '/media/work-01.jpg' },
-  { label: 'Studio', href: '#studio', index: '02', preview: '/media/work-04.jpg' },
-  { label: 'Services', href: '#services', index: '03', preview: '/media/svc-02.jpg' },
-  { label: 'Journal', href: '#journal', index: '04', preview: '/media/work-03.jpg' },
-  { label: 'Contact', href: '#contact', index: '05', preview: '/media/work-06.jpg' },
+  { label: 'About', href: '#about', index: '01', preview: '/media/work-01.jpg' },
+  { label: 'What We Do', href: '#what', index: '02', preview: '/media/work-04.jpg' },
+  { label: 'Focus', href: '#focus', index: '03', preview: '/media/svc-02.jpg' },
+  { label: 'The Year', href: '#year', index: '04', preview: '/media/work-03.jpg' },
+  { label: 'Join', href: '#join', index: '05', preview: '/media/work-06.jpg' },
 ];
 
 export const HERO = {
-  eyebrow: '[LABEL] Independent studio — Est. 2016',
-  /** Split across lines by hand so the ragging is art-directed, not accidental. */
+  eyebrow: 'Student-run club — San Marin High School',
+  /**
+   * Split across lines by hand so the ragging is art-directed. `em` is the one
+   * italic character in each line — the single flourish in the type system.
+   */
   headline: [
-    { text: 'Creative stud', em: 'i', tail: 'o' },
-    { text: 'bu', em: 'i', tail: 'lt for growth.' },
+    { text: 'Bu', em: 'i', tail: 'ld something' },
+    { text: 'worth chas', em: 'i', tail: 'ng.' },
   ],
   meta: [
-    { k: 'Based in', v: '[CITY] New York / Amsterdam' },
-    { k: 'Available', v: '[STATUS] Q3 2026' },
+    { k: 'We meet', v: '[DAY & TIME]' },
+    { k: 'Where', v: '[ROOM] — San Marin High School' },
   ],
   scroll: 'Scroll to begin',
 };
 
-export const CLIENTS = [
-  '[CLIENT 01]', '[CLIENT 02]', '[CLIENT 03]', '[CLIENT 04]',
-  '[CLIENT 05]', '[CLIENT 06]', '[CLIENT 07]', '[CLIENT 08]',
+/** Ticker under the hero — what the club actually covers. */
+export const TOPICS = [
+  'ENTREPRENEURSHIP', 'AI AS A TOOL', 'STARTUPS', 'PITCHING',
+  'FINANCE & INVESTING', 'PRODUCT', 'ENGINEERING DESIGN CYCLE', 'HACKATHON',
 ];
 
-export const MANIFESTO = {
-  label: 'What we do',
-  heading: 'All the ways we move brands',
+export const ABOUT = {
+  label: 'Who we are',
+  heading: 'For anyone who wants to build something real',
   body:
-    '[DESCRIPTION] Strategy sets the direction, design gives it form, and development makes it real. We build the whole arc — from the first uncomfortable question to the thing that ships.',
+    'A company, a product, an app, or just a good idea worth chasing. We bring together entrepreneurship and business with technology, AI and STEM — because most good ventures today need both sides working together.',
   stats: [
-    { n: '120+', l: '[STAT] Projects shipped' },
-    { n: '18', l: '[STAT] Countries' },
-    { n: '9 yrs', l: '[STAT] In practice' },
+    { n: '1', l: 'Flagship hackathon a year' },
+    { n: '6', l: 'Ways we actually build' },
+    { n: '0', l: 'Experience required' },
   ],
 };
 
-export type Project = {
+/** The full-bleed hinge between the intro and the programme. */
+export const HINGE = {
+  word: 'Build',
+  labelLeft: 'What we do',
+  labelRight: 'Every week',
+  caption: { lead: 'Six ways we turn an idea into something you can ', em: 'actually', tail: ' show.' } as Phrase,
+  tick: '01 / 06',
+};
+
+export type Activity = {
   index: string;
+  kicker: string;
   title: string;
-  client: string;
-  discipline: string;
-  year: string;
+  blurb: string;
+  tag: string;
   image: string;
 };
 
-export const PROJECTS: Project[] = [
-  { index: '01', title: '[PROJECT] Ember Index', client: '[CLIENT]', discipline: 'Brand / Web / Motion', year: '2026', image: '/media/work-01.jpg' },
-  { index: '02', title: '[PROJECT] Gilded Rail', client: '[CLIENT]', discipline: 'Identity / Packaging', year: '2025', image: '/media/work-02.jpg' },
-  { index: '03', title: '[PROJECT] Night Spectrum', client: '[CLIENT]', discipline: 'Campaign / WebGL', year: '2025', image: '/media/work-03.jpg' },
-  { index: '04', title: '[PROJECT] Quiet Machine', client: '[CLIENT]', discipline: 'Product / Design System', year: '2025', image: '/media/work-04.jpg' },
-  { index: '05', title: '[PROJECT] Signal Bloom', client: '[CLIENT]', discipline: 'Art Direction / Film', year: '2024', image: '/media/work-05.jpg' },
-  { index: '06', title: '[PROJECT] Low Orbit', client: '[CLIENT]', discipline: 'Brand / Platform', year: '2024', image: '/media/work-06.jpg' },
-];
-
-/** The four plates cycled through the WebGL displacement gallery. */
-export const GALLERY = [
-  { title: '[PROJECT] Ember Index', meta: 'Brand — 2026', image: '/media/gallery-01.jpg' },
-  { title: '[PROJECT] Gilded Rail', meta: 'Identity — 2025', image: '/media/gallery-02.jpg' },
-  { title: '[PROJECT] Night Spectrum', meta: 'Campaign — 2025', image: '/media/gallery-03.jpg' },
-  { title: '[PROJECT] Quiet Machine', meta: 'Product — 2025', image: '/media/gallery-04.jpg' },
-];
-
-export const SERVICES = [
-  {
-    index: '01',
-    title: 'Strategy',
-    body: '[DESCRIPTION] The thinking before the making. We dig into markets, audiences and positioning until it clicks.',
-    tags: ['Positioning', 'Research', 'Naming', 'Messaging'],
-    marquee: 'BRAND STRATEGY',
-    image: '/media/svc-01.jpg',
-  },
-  {
-    index: '02',
-    title: 'Creative & Design',
-    body: '[DESCRIPTION] Identity systems, art direction and interface design that hold together everywhere they land.',
-    tags: ['Identity', 'Art Direction', 'Design Systems', 'Motion'],
-    marquee: 'DESIGN SYSTEMS',
-    image: '/media/svc-02.jpg',
-  },
-  {
-    index: '03',
-    title: 'Development',
-    body: '[DESCRIPTION] Sites and products engineered for speed, built to survive contact with real users.',
-    tags: ['Web', 'WebGL', 'Headless CMS', 'Performance'],
-    marquee: 'ENGINEERING',
-    image: '/media/svc-03.jpg',
-  },
-  {
-    index: '04',
-    title: 'Film & Motion',
-    body: '[DESCRIPTION] Direction, 3D and post — the moving half of a brand, made in-house.',
-    tags: ['Direction', '3D', 'Post', 'Sound'],
-    marquee: 'MOTION DESIGN',
-    image: '/media/svc-04.jpg',
-  },
-];
-
-export const PROCESS = [
-  { index: '01', title: 'Listen', body: '[DESCRIPTION] We start by understanding the business, not the brief.' },
-  { index: '02', title: 'Frame', body: '[DESCRIPTION] A sharp point of view, agreed before a pixel moves.' },
-  { index: '03', title: 'Make', body: '[DESCRIPTION] Design and build in the same room, in short loops.' },
-  { index: '04', title: 'Sharpen', body: '[DESCRIPTION] We keep going until it feels inevitable.' },
-  { index: '05', title: 'Ship', body: '[DESCRIPTION] Launch, measure, and stay on after the confetti.' },
-];
-
-export const STATEMENT = {
-  small: '[LABEL] The short version',
-  lines: ['We make', 'brands', 'impossible', 'to scroll past.'],
+/** The programme — one card per thing the club actually does. */
+export const PROGRAM = {
+  label: 'What we do',
+  title: { lead: 'The ', em: 'programme', tail: '' } as Phrase,
+  meta: 'Six things, all year',
+  items: [
+    {
+      index: '01',
+      kicker: 'Sessions',
+      title: 'Guest speakers',
+      blurb:
+        'People involved in genuinely impactful work, with real stories to tell. Interactive, not lectures — think live activities like guessing the real budget of a project.',
+      tag: 'Interactive',
+      image: '/media/work-01.jpg',
+    },
+    {
+      index: '02',
+      kicker: 'Tools',
+      title: 'AI as a business tool',
+      blurb:
+        'We teach you to actually use AI to get ahead — the way a $100k/year engineer uses it, not like an assistant. Free tools that make life easier, plus the real tech stack behind building apps and startups.',
+      tag: 'Wispr Flow, Granola',
+      image: '/media/work-02.jpg',
+    },
+    {
+      index: '03',
+      kicker: 'The goal',
+      title: 'A real business by the end of the year',
+      blurb:
+        'We teach you how to actually walk out with your own business or startup idea in hand.',
+      tag: 'Yours to keep',
+      image: '/media/work-03.jpg',
+    },
+    {
+      index: '04',
+      kicker: 'Thinking',
+      title: 'The open-ended side of business',
+      blurb:
+        'The Engineering Design Cycle, finance and investing, and building creative judgment — not just formulas.',
+      tag: 'Judgment, not formulas',
+      image: '/media/work-04.jpg',
+    },
+    {
+      index: '05',
+      kicker: 'Practice',
+      title: 'Pitch exercises',
+      blurb:
+        'Held throughout the year, so presenting your ideas stops being the scary part.',
+      tag: 'All year',
+      image: '/media/work-05.jpg',
+    },
+    {
+      index: '06',
+      kicker: 'Flagship',
+      title: 'The hackathon',
+      blurb:
+        'Teams build and demo something they have made — in a single day.',
+      tag: 'One day, one build',
+      image: '/media/work-06.jpg',
+    },
+  ] satisfies Activity[],
 };
 
-export const JOURNAL = [
-  { index: '01', title: '[ARTICLE] On making motion mean something', cat: 'Craft', date: 'Aug 2026' },
-  { index: '02', title: '[ARTICLE] The case against the hero carousel', cat: 'Opinion', date: 'Jun 2026' },
-  { index: '03', title: '[ARTICLE] Shipping WebGL that survives a phone', cat: 'Engineering', date: 'Apr 2026' },
-];
+/** Cycled through the WebGL displacement plate. Swap in real photos. */
+export const INSIDE = {
+  label: 'Inside the club',
+  title: { lead: 'What a ', em: 'meeting', tail: ' looks like' } as Phrase,
+  meta: 'Drag or hover to distort',
+  items: [
+    { title: '[PHOTO] Guest speaker session', meta: 'Interactive, not a lecture' },
+    { title: '[PHOTO] Build night', meta: 'Tools, stacks and shipping' },
+    { title: '[PHOTO] Pitch practice', meta: 'Held throughout the year' },
+    { title: '[PHOTO] The hackathon', meta: 'Build and demo in one day' },
+  ].map((x, i) => ({ ...x, image: `/media/gallery-0${i + 1}.jpg` })),
+};
 
-export const CTA = {
-  headline: { lead: 'Have a project', em: 'in mind', tail: '?' },
-  second: { lead: "Let's see", em: 'it', tail: 'through.' },
-  button: 'Start a project',
-  note: '[DESCRIPTION] Tell us what you are building. We reply within two working days.',
+export const FOCUS = {
+  label: 'Focus areas',
+  title: { lead: 'Business and ', em: 'building', tail: ', together' } as Phrase,
+  intro:
+    'Four things we keep coming back to. Most projects need more than one of them — that is rather the point of putting business and tech in the same room.',
+  items: [
+    {
+      index: '01',
+      title: 'Entrepreneurship',
+      tags: ['Idea to venture', 'Startups', 'Business models', 'Customers'],
+      marquee: 'BUILD A BUSINESS',
+      image: '/media/svc-01.jpg',
+    },
+    {
+      index: '02',
+      title: 'AI & Technology',
+      tags: ['AI tools', 'Wispr Flow', 'Granola', 'Tech stack'],
+      marquee: 'AI AS A TOOL',
+      image: '/media/svc-02.jpg',
+    },
+    {
+      index: '03',
+      title: 'Finance & Judgment',
+      tags: ['Investing', 'Budgets', 'Design cycle', 'Creative judgment'],
+      marquee: 'FINANCE & JUDGMENT',
+      image: '/media/svc-03.jpg',
+    },
+    {
+      index: '04',
+      title: 'Pitching & Demo',
+      tags: ['Pitch practice', 'Public speaking', 'Hackathon', 'Demo day'],
+      marquee: 'PITCH & DEMO',
+      image: '/media/svc-04.jpg',
+    },
+  ],
+};
+
+/** Horizontal rail — the shape of a year in the club. */
+export const YEAR = {
+  label: 'How the year runs',
+  title: { lead: 'Five steps, ', em: 'no', tail: ' application.' } as Phrase,
+  body:
+    'There is no tryout and no prerequisite. This is the whole arc, from the first meeting to demo day.',
+  steps: [
+    { index: '01', title: 'Show up', body: 'No application, no experience. Come to a meeting and see what it is.' },
+    { index: '02', title: 'Learn the tools', body: 'AI, the tech stack and the business basics — the things that make building faster.' },
+    { index: '03', title: 'Find your idea', body: 'A company, a product, an app, or something you just want to exist.' },
+    { index: '04', title: 'Pitch it', body: 'Pitch exercises all year, so presenting stops being the scary part.' },
+    { index: '05', title: 'Build & demo', body: 'The flagship hackathon — teams build and demo something in a single day.' },
+  ],
+};
+
+export const WHY = {
+  label: 'Why join',
+  /** The third line takes the accent colour. */
+  lines: ['Start a company.', 'Ship an app.', 'Or just build', 'with good people.'],
+  note:
+    'Whether you want to start a company, build an app, learn how startups actually work, or just meet people who like building things — there is a place for you here.',
+};
+
+export const FAQ = {
+  label: 'Before you come',
+  title: { lead: 'Questions we ', em: 'actually', tail: ' get' } as Phrase,
+  items: [
+    { index: '01', q: 'Do I need any experience?', a: 'None. Most people start with nothing but an interest in building things.' },
+    { index: '02', q: 'Do I need an idea already?', a: 'No — finding one is part of the year.' },
+    { index: '03', q: 'Is this only for business kids?', a: 'No. We mix business with technology, AI and STEM, and both sides are welcome.' },
+    { index: '04', q: 'How much time does it take?', a: 'One meeting a week, plus the hackathon if you want in on it.' },
+    { index: '05', q: 'When and where do you meet?', a: '[DAY & TIME] in [ROOM], at San Marin High School.' },
+  ],
+};
+
+export const JOIN = {
+  headline: { lead: 'Come to the next', em: 'meeting', tail: '.' },
+  second: { lead: 'You need', em: 'nothing', tail: 'to start.' },
+  button: 'Join the club',
+  note:
+    'Turning up is the whole process — no application, no dues, no experience. Questions first? Send us a message.',
+  email: '[EMAIL@EXAMPLE.COM]',
 };
 
 export const FOOTER = {
-  offices: [
-    { city: '[CITY] New York', line1: '[ADDRESS] 411 Canal Street', line2: 'hello@example.com' },
-    { city: '[CITY] Amsterdam', line1: '[ADDRESS] Keizersgracht 210', line2: 'studio@example.com' },
+  columns: [
+    { label: 'Meetings', lines: ['[DAY & TIME]', '[ROOM], San Marin High School'] },
+    { label: 'Contact', lines: ['[EMAIL@EXAMPLE.COM]', '[ADVISOR / OFFICER NAME]'] },
   ],
-  socials: ['Instagram', 'LinkedIn', 'Behance', 'Dribbble', 'Read.cv'],
-  legal: ['Privacy', 'Terms', 'Cookies'],
+  followLabel: 'Follow',
+  socials: ['[INSTAGRAM]', '[DISCORD]', '[REMIND]'],
+  noteLabel: 'Announcements',
+  note: 'Meeting reminders and speaker announcements go out on [INSTAGRAM].',
+  noteCta: 'Follow us',
 };

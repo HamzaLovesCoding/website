@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { Fragment, useEffect, useMemo, useRef } from 'react';
 import { gsap } from '@/lib/gsap';
 import { scrollTo } from '@/lib/smooth';
 import { damp } from '@/lib/math';
@@ -123,19 +123,22 @@ export default function Footer() {
   return (
     <footer className={s.footer} ref={root} data-ambient="0.6">
       <div className={`${s.top} u-shell`}>
-        {FOOTER.offices.map((o) => (
-          <div className={s.col} key={o.city}>
-            <span className="u-label">{o.city}</span>
+        {FOOTER.columns.map((c) => (
+          <div className={s.col} key={c.label}>
+            <span className="u-label">{c.label}</span>
             <span className={s.colBody}>
-              {o.line1}
-              <br />
-              {o.line2}
+              {c.lines.map((line, i) => (
+                <Fragment key={line}>
+                  {i > 0 ? <br /> : null}
+                  {line}
+                </Fragment>
+              ))}
             </span>
           </div>
         ))}
 
         <div className={s.col}>
-          <span className="u-label">Follow</span>
+          <span className="u-label">{FOOTER.followLabel}</span>
           <div className={s.stack}>
             {FOOTER.socials.map((x) => (
               <a className={s.item} key={x} href="#">
@@ -146,17 +149,21 @@ export default function Footer() {
         </div>
 
         <div className={s.col}>
-          <span className="u-label">Newsletter</span>
-          <span className={s.colBody}>
-            [DESCRIPTION] One email a quarter. Work, notes, nothing else.
-          </span>
-          <a className={s.item} href="mailto:hello@example.com">
-            Subscribe ↗
+          <span className="u-label">{FOOTER.noteLabel}</span>
+          <span className={s.colBody}>{FOOTER.note}</span>
+          <a className={s.item} href="#">
+            {FOOTER.noteCta} ↗
           </a>
         </div>
       </div>
 
-      <div className={s.markWrap} ref={markWrap} data-cursor="view" data-cursor-label="Hello">
+      <div
+        className={s.markWrap}
+        ref={markWrap}
+        data-cursor="view"
+        data-cursor-label="Hello"
+        style={{ '--mark-len': chars.length } as React.CSSProperties}
+      >
         <div className={s.mark} aria-label={SITE.wordmark} role="img">
           {LAYERS.map((layer) => (
             <div className={`${s.layer} ${layer}`} key={layer} aria-hidden="true">
@@ -172,16 +179,10 @@ export default function Footer() {
 
       <div className={`${s.bottom} u-shell`}>
         <span className="u-label">
-          {SITE.year} {SITE.name} — {SITE.tagline}
+          {SITE.name} — {SITE.school}
         </span>
 
-        <div className={s.legal}>
-          {FOOTER.legal.map((l) => (
-            <a className={`${s.item} u-label`} key={l} href="#">
-              {l}
-            </a>
-          ))}
-        </div>
+        <span className="u-label">{SITE.year}</span>
 
         <button
           className={s.toTop}

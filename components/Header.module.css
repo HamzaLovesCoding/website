@@ -29,12 +29,16 @@
   white-space: nowrap;
 }
 
-.mark sup {
+/* A word, not a ® — so it sits on the baseline with air around it rather
+   than crowding the descenders of the name it follows. */
+.markSup {
   font-family: var(--font-mono);
-  font-size: 0.42em;
-  vertical-align: super;
-  letter-spacing: 0.1em;
+  font-size: 0.46em;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--accent);
+  margin-left: 0.55em;
+  vertical-align: 0.1em;
 }
 
 .nav {

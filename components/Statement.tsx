@@ -5,7 +5,7 @@ import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { scramble } from '@/lib/scramble';
 import { split } from '@/lib/split';
 import { useReducedMotion } from '@/lib/hooks';
-import { STATEMENT } from '@/lib/content';
+import { WHY } from '@/lib/content';
 import s from './Statement.module.css';
 
 /**
@@ -83,19 +83,18 @@ export default function Statement() {
   return (
     <section className={s.section} ref={root} data-ambient="0.68">
       <div className={`${s.inner} u-shell`}>
-        <p className={`${s.label} u-label u-label--accent`}>{STATEMENT.small}</p>
+        <p className={`${s.label} u-label u-label--accent`}>{WHY.label}</p>
 
         <div className={s.lines}>
-          {STATEMENT.lines.map((l) => (
+          {WHY.lines.map((l) => (
             <span className={s.line} key={l}>
               {l}
             </span>
           ))}
         </div>
 
-        <p className={s.glitch} data-text="[DESCRIPTION] Independent since 2016. Forty-one people across two studios, one shared standard for what counts as finished.">
-          [DESCRIPTION] Independent since 2016. Forty-one people across two
-          studios, one shared standard for what counts as finished.
+        <p className={s.glitch} data-text={WHY.note}>
+          {WHY.note}
         </p>
       </div>
     </section>

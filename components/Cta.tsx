@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { gsap } from '@/lib/gsap';
 import { split } from '@/lib/split';
 import { useReducedMotion } from '@/lib/hooks';
-import { CTA } from '@/lib/content';
+import { JOIN } from '@/lib/content';
 import Magnetic from './Magnetic';
 import s from './Cta.module.css';
 
@@ -64,35 +64,35 @@ export default function Cta() {
   }, [reduced]);
 
   return (
-    <section className={s.section} ref={root} id="contact" data-ambient="1">
+    <section className={s.section} ref={root} id="join" data-ambient="1">
       <div className={s.glow} aria-hidden="true" />
 
       <div className={`${s.inner} u-shell`}>
         <h2 className={s.headline}>
           <span className="u-mask">
             <span style={{ display: 'block' }} data-cta-line>
-              <span className={s.dim}>{CTA.headline.lead} </span>
-              <em>{CTA.headline.em}</em>
-              {CTA.headline.tail}
+              <span className={s.dim}>{JOIN.headline.lead} </span>
+              <em>{JOIN.headline.em}</em>
+              {JOIN.headline.tail}
             </span>
           </span>
           <span className="u-mask">
             <span style={{ display: 'block' }} data-cta-line>
-              {CTA.second.lead} <em>{CTA.second.em}</em> {CTA.second.tail}
+              {JOIN.second.lead} <em>{JOIN.second.em}</em> {JOIN.second.tail}
             </span>
           </span>
         </h2>
 
         <div className={s.foot}>
-          <p className={s.note}>{CTA.note}</p>
+          <p className={s.note}>{JOIN.note}</p>
 
           <Magnetic strength={0.4} radius={90} innerSelector={`.${s.buttonLabel}`}>
             <a
               className={s.button}
-              href="mailto:hello@example.com"
+              href={`mailto:${JOIN.email}`}
               data-cursor="link"
             >
-              <span className={s.buttonLabel}>{CTA.button}</span>
+              <span className={s.buttonLabel}>{JOIN.button}</span>
               <span className={s.buttonArrow} aria-hidden="true">
                 ↗
               </span>

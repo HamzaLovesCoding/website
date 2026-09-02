@@ -8,7 +8,10 @@
  *
  *   node scripts/build-preview.mjs
  */
-import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, mkdtempSync, rmSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
+import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 import sharp from 'sharp';
 
@@ -132,16 +135,30 @@ const shaders = {
 
 /* --------------------------------------------------------------- content -- */
 
-/** Evaluates lib/content.ts as data by stripping its types. */
+/**
+ * Loads lib/content.ts as data.
+ *
+ * Transpiled with the real compiler rather than regex-stripped: type
+ * assertions and `satisfies` clauses are trivially easy to get wrong by hand,
+ * and getting them wrong silently corrupts the copy.
+ */
 async function loadContent() {
-  const src = read('lib', 'content.ts')
-    .replace(/^import[^\n]*\n/gm, '')
-    .replace(/export type [\s\S]*?\n};\n/g, '')
-    .replace(/: Project\[\]/g, '')
-    .replace(/^export /gm, '');
-  const names = [...src.matchAll(/^const (\w+)/gm)].map((m) => m[1]);
-  const fn = new Function(`${src}\nreturn {${names.join(',')}};`);
-  return fn();
+  const out = mkdtempSync(join(tmpdir(), 'vm-content-'));
+  try {
+    execFileSync(
+      'npx',
+      ['tsc', 'lib/content.ts', '--ignoreConfig', '--outDir', out,
+       '--target', 'es2020', '--module', 'esnext', '--skipLibCheck'],
+      { cwd: ROOT, stdio: 'pipe' },
+    );
+    const mod = await import(pathToFileURL(join(out, 'content.js')).href);
+    // Drop the type-only exports, which transpile away to nothing.
+    return Object.fromEntries(
+      Object.entries(mod).filter(([, v]) => v !== undefined),
+    );
+  } finally {
+    rmSync(out, { recursive: true, force: true });
+  }
 }
 
 /* ----------------------------------------------------------------- media -- */
@@ -193,7 +210,7 @@ for (const [path, uri] of Object.entries(media)) {
   styles = styles.split(`url('${path}')`).join(`url('${uri}')`);
 }
 
-const html = `<title>Vivid Motion</title>
+const html = `<title>${content.SITE.name}</title>
 <style>
 ${styles}
 </style>

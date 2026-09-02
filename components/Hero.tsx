@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap, EASE } from '@/lib/gsap';
 import { onIntro } from '@/lib/bus';
 import { useReducedMotion } from '@/lib/hooks';
-import { CLIENTS, HERO } from '@/lib/content';
+import { HERO, TOPICS } from '@/lib/content';
 import HeroCanvas from './HeroCanvas';
 import Marquee from './Marquee';
 import s from './Hero.module.css';
@@ -127,9 +127,9 @@ export default function Hero() {
 
       <div className={s.clients}>
         <Marquee duration={44}>
-          {CLIENTS.map((c) => (
-            <span className={s.client} key={c}>
-              {c}
+          {TOPICS.map((t) => (
+            <span className={s.client} key={t}>
+              {t}
             </span>
           ))}
         </Marquee>

@@ -3,6 +3,8 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { gsap } from '@/lib/gsap';
+import { HINGE, PROGRAM } from '@/lib/content';
+import Em from './Em';
 import { useReducedMotion } from '@/lib/hooks';
 import s from './Expand.module.css';
 
@@ -75,19 +77,17 @@ export default function Expand() {
   return (
     <section className={s.section} ref={root} data-ambient="0.5">
       <div className={s.sticky}>
-        <h2 className={s.word} aria-label="Selected work">
-          Work
-        </h2>
+        <h2 className={s.word}>{HINGE.word}</h2>
 
         <div className={s.wordSub} aria-hidden="true">
-          <span className="u-label">[LABEL] Selected output</span>
-          <span className="u-label">2024 — 2026</span>
+          <span className="u-label">{HINGE.labelLeft}</span>
+          <span className="u-label">{HINGE.labelRight}</span>
         </div>
 
         <div className={s.frame}>
           <Image
             className={s.frameMedia}
-            src="/media/work-01.jpg"
+            src={PROGRAM.items[0].image}
             alt=""
             fill
             sizes="100vw"
@@ -99,13 +99,13 @@ export default function Expand() {
 
         <div className={s.caption}>
           <p className={s.captionTitle}>
-            [PROJECT] Six years of work <em>for</em> people who ship.
+            <Em phrase={HINGE.caption} />
           </p>
-          <span className="u-label">[LABEL] Scroll for the index</span>
+          <span className="u-label">{HINGE.labelLeft}</span>
         </div>
 
         <div className={s.tick}>
-          <span className="u-label u-label--accent">01 / 06</span>
+          <span className="u-label u-label--accent">{HINGE.tick}</span>
         </div>
       </div>
     </section>

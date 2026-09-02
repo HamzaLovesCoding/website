@@ -4,7 +4,7 @@ import { Fragment, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { gsap } from '@/lib/gsap';
 import { useReducedMotion } from '@/lib/hooks';
-import { MANIFESTO } from '@/lib/content';
+import { ABOUT } from '@/lib/content';
 import s from './Manifesto.module.css';
 
 export default function Manifesto() {
@@ -96,7 +96,7 @@ export default function Manifesto() {
   }, [reduced]);
 
   return (
-    <section className={s.section} ref={root} id="studio" data-ambient="0.4">
+    <section className={s.section} ref={root} id="about" data-ambient="0.4">
       <div className={s.sticky}>
         <div className={s.plate} aria-hidden="true">
           <Image
@@ -111,21 +111,21 @@ export default function Manifesto() {
         <div className={s.plateVeil} aria-hidden="true" />
 
         <div className={`${s.inner} u-shell`}>
-          <p className={`${s.label} u-label u-label--accent`}>{MANIFESTO.label}</p>
+          <p className={`${s.label} u-label u-label--accent`}>{ABOUT.label}</p>
 
           <h2 className={s.heading}>
-            {MANIFESTO.heading.split(' ').map((w, i) => (
+            {ABOUT.heading.split(' ').map((w, i) => (
               <span className={s.word} key={`${w}-${i}`}>
                 {w}
-                {i < MANIFESTO.heading.split(' ').length - 1 ? ' ' : ''}
+                {i < ABOUT.heading.split(' ').length - 1 ? ' ' : ''}
               </span>
             ))}
           </h2>
 
-          <p className={s.body}>{MANIFESTO.body}</p>
+          <p className={s.body}>{ABOUT.body}</p>
 
           <div className={`${s.stats}`}>
-            {MANIFESTO.stats.map((st) => (
+            {ABOUT.stats.map((st) => (
               <div className={s.stat} key={st.l}>
                 <span className={s.statN} data-count={st.n}>
                   0

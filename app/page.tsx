@@ -7,7 +7,7 @@ import Gallery from '@/components/Gallery';
 import Services from '@/components/Services';
 import Process from '@/components/Process';
 import Statement from '@/components/Statement';
-import Journal from '@/components/Journal';
+import Faq from '@/components/Faq';
 import Cta from '@/components/Cta';
 import Footer from '@/components/Footer';
 
@@ -24,7 +24,7 @@ export default function Page() {
         <Services />
         <Process />
         <Statement />
-        <Journal />
+        <Faq />
         <Cta />
       </main>
       <Footer />

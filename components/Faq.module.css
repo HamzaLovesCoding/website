@@ -1,0 +1,72 @@
+.section {
+  position: relative;
+  z-index: 2;
+  padding-block: var(--section-y);
+}
+
+.list {
+  border-top: 1px solid var(--line);
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: start;
+  gap: clamp(1rem, 3vw, 3rem);
+  padding-block: clamp(1.4rem, 3.2vh, 2.25rem);
+  border-bottom: 1px solid var(--line);
+  isolation: isolate;
+}
+
+/* Warm wash wiping in from the left, so the row you are reading is lit. */
+.row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to right, rgba(240, 59, 15, 0.1), transparent 60%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.75s var(--ease-out);
+}
+
+.row:hover::before { transform: scaleX(1); }
+
+.index {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.18em;
+  color: var(--fg-faint);
+  padding-top: 0.4em;
+  transition: color 0.45s var(--ease-out);
+}
+
+.row:hover .index { color: var(--accent); }
+
+.question {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.5vw, 2.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  max-width: 20ch;
+}
+
+.answer {
+  font-size: var(--t-body);
+  line-height: 1.6;
+  color: var(--fg-mute);
+  max-width: 46ch;
+  padding-top: 0.25em;
+}
+
+@media (max-width: 800px) {
+  .row {
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    row-gap: 0.6rem;
+  }
+
+  /* The answer drops under the question rather than beside it. */
+  .answer { grid-column: 2; }
+  .question { max-width: none; }
+}

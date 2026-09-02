@@ -5,7 +5,8 @@ import { gsap } from '@/lib/gsap';
 import { damp } from '@/lib/math';
 import { usePrecisePointer, useReducedMotion } from '@/lib/hooks';
 import { galleryFrag, galleryVert } from '@/lib/shaders/gallery';
-import { GALLERY } from '@/lib/content';
+import { INSIDE } from '@/lib/content';
+import Em from './Em';
 import s from './Gallery.module.css';
 
 const HOLD = 5200; // ms a slide rests before advancing on its own
@@ -33,7 +34,7 @@ export default function Gallery() {
   reducedRef.current = reduced;
 
   const go = useCallback((next: number) => {
-    const i = (next + GALLERY.length) % GALLERY.length;
+    const i = (next + INSIDE.items.length) % INSIDE.items.length;
     setIndex(i);
     api.current?.to(i);
   }, []);
@@ -53,7 +54,7 @@ export default function Gallery() {
     if (Math.abs(dx) < 64) return;
     drag.current.active = false;
     setIndex((i) => {
-      const n = (i + (dx < 0 ? 1 : -1) + GALLERY.length) % GALLERY.length;
+      const n = (i + (dx < 0 ? 1 : -1) + INSIDE.items.length) % INSIDE.items.length;
       api.current?.to(n);
       return n;
     });
@@ -63,7 +64,7 @@ export default function Gallery() {
     // A press that never travelled is a click: advance.
     if (drag.current.active && Math.abs(e.clientX - drag.current.x) < 6) {
       setIndex((i) => {
-        const n = (i + 1) % GALLERY.length;
+        const n = (i + 1) % INSIDE.items.length;
         api.current?.to(n);
         return n;
       });
@@ -118,7 +119,7 @@ export default function Gallery() {
       let disp: import('three').Texture;
       try {
         [textures, disp] = await Promise.all([
-          Promise.all(GALLERY.map((g) => load(g.image))),
+          Promise.all(INSIDE.items.map((g) => load(g.image))),
           load('/media/displacement.jpg'),
         ]);
       } catch {
@@ -290,7 +291,7 @@ export default function Gallery() {
       // Advancing under the pointer fights the visitor for control.
       if (!paused && document.visibilityState === 'visible') {
         setIndex((i) => {
-          const n = (i + 1) % GALLERY.length;
+          const n = (i + 1) % INSIDE.items.length;
           api.current?.to(n);
           return n;
         });
@@ -318,22 +319,22 @@ export default function Gallery() {
 
   useEffect(() => {
     gsap.to(`.${s.progressFill}`, {
-      scaleX: (index + 1) / GALLERY.length,
+      scaleX: (index + 1) / INSIDE.items.length,
       duration: 0.9,
       ease: 'expo.out',
     });
   }, [index]);
 
-  const item = GALLERY[index];
+  const item = INSIDE.items[index];
 
   return (
-    <section className={s.section} ref={root} data-ambient="0.38">
+    <section className={s.section} ref={root} id="inside" data-ambient="0.38">
       <div className="u-shell">
         <div className="u-head">
           <h2 className="u-title">
-            Featured <em>work</em>
+            <Em phrase={INSIDE.title} />
           </h2>
-          <span className="u-label">[LABEL] Drag or hover to distort</span>
+          <span className="u-label">{INSIDE.meta}</span>
         </div>
 
         <div className={s.grid}>
@@ -346,7 +347,7 @@ export default function Gallery() {
               <span className={s.count}>
                 {String(index + 1).padStart(2, '0')}
                 <span className={s.countTotal}>
-                  {' '}/ {String(GALLERY.length).padStart(2, '0')}
+                  {' '}/ {String(INSIDE.items.length).padStart(2, '0')}
                 </span>
               </span>
               <span className={s.progress}>
@@ -374,7 +375,7 @@ export default function Gallery() {
             </div>
 
             <div className={s.dots} aria-hidden="true">
-              {GALLERY.map((g, i) => (
+              {INSIDE.items.map((g, i) => (
                 <span className={s.dot} key={g.title} data-on={i === index} />
               ))}
             </div>
@@ -391,7 +392,7 @@ export default function Gallery() {
             onPointerCancel={() => (drag.current.active = false)}
           >
             {webgl === false &&
-              GALLERY.map((g, i) => (
+              INSIDE.items.map((g, i) => (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   className={s.fallbackImg}

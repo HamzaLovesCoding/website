@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { gsap } from '@/lib/gsap';
 import { split } from '@/lib/split';
 import { usePrecisePointer, useReducedMotion } from '@/lib/hooks';
-import { SERVICES } from '@/lib/content';
+import { FOCUS } from '@/lib/content';
+import Em from './Em';
 import Marquee from './Marquee';
 import s from './Services.module.css';
 
@@ -120,23 +121,19 @@ export default function Services() {
   }, [precise, reduced]);
 
   return (
-    <section className={s.section} ref={root} id="services" data-ambient="0.3">
+    <section className={s.section} ref={root} id="focus" data-ambient="0.3">
       <div className="u-shell">
         <div className="u-head">
           <h2 className="u-title">
-            All the ways we <em>move</em> brands
+            <Em phrase={FOCUS.title} />
           </h2>
-          <span className="u-label">[LABEL] Capabilities</span>
+          <span className="u-label">{FOCUS.label}</span>
         </div>
 
-        <p className={s.intro}>
-          [DESCRIPTION] Four practices, one team. Most projects use more than
-          one — the handoffs are where the work usually goes wrong, so we
-          removed them.
-        </p>
+        <p className={s.intro}>{FOCUS.intro}</p>
 
         <div className={s.list}>
-          {SERVICES.map((svc, i) => (
+          {FOCUS.items.map((svc, i) => (
             <div
               className={s.row}
               key={svc.index}

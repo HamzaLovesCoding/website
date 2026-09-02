@@ -6,7 +6,7 @@ import { glitchOnce } from '@/lib/scramble';
 import { onIntro } from '@/lib/bus';
 import { scrollTo } from '@/lib/smooth';
 import { useReducedMotion } from '@/lib/hooks';
-import { CTA, NAV, SITE } from '@/lib/content';
+import { JOIN, NAV, SITE } from '@/lib/content';
 import Magnetic from './Magnetic';
 import s from './Header.module.css';
 
@@ -115,8 +115,8 @@ export default function Header({ open, onToggle }: Props) {
         onClick={(e) => jump(e, '#top')}
         aria-label={`${SITE.name} — home`}
       >
-        <span data-glitch>{SITE.name}</span>
-        <sup>®</sup>
+        <span data-glitch>{SITE.markLead}</span>
+        <span className={s.markSup}>{SITE.markSup}</span>
       </a>
 
       <nav className={s.nav} aria-label="Primary">
@@ -136,12 +136,12 @@ export default function Header({ open, onToggle }: Props) {
         <Magnetic strength={0.28} innerSelector={`.${s.ctaLabel}`}>
           <a
             className={s.cta}
-            href="#contact"
-            onClick={(e) => jump(e, '#contact')}
+            href="#join"
+            onClick={(e) => jump(e, '#join')}
             data-cursor="link"
           >
             <span className={s.dot} aria-hidden="true" />
-            <span className={s.ctaLabel}>{CTA.button}</span>
+            <span className={s.ctaLabel}>{JOIN.button}</span>
           </a>
         </Magnetic>
 

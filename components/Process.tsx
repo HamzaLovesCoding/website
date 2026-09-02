@@ -3,7 +3,8 @@
 import { useEffect, useRef } from 'react';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { useReducedMotion } from '@/lib/hooks';
-import { PROCESS } from '@/lib/content';
+import { YEAR } from '@/lib/content';
+import Em from './Em';
 import s from './Process.module.css';
 
 /**
@@ -96,21 +97,18 @@ export default function Process() {
   }, [reduced]);
 
   return (
-    <section className={s.section} ref={root} data-ambient="0.36">
+    <section className={s.section} ref={root} id="year" data-ambient="0.36">
       <div className={s.sticky}>
         <div className={s.rail} ref={rail}>
           <div className={s.lead}>
-            <span className="u-label u-label--accent">[LABEL] How we work</span>
+            <span className="u-label u-label--accent">{YEAR.label}</span>
             <h2 className={s.leadTitle}>
-              Five steps, <em>no</em> surprises.
+              <Em phrase={YEAR.title} />
             </h2>
-            <p className={s.leadBody}>
-              [DESCRIPTION] The same shape every time, whether it is a six-week
-              sprint or a two-year platform.
-            </p>
+            <p className={s.leadBody}>{YEAR.body}</p>
           </div>
 
-          {PROCESS.map((p) => (
+          {YEAR.steps.map((p) => (
             <article className={s.card} key={p.index}>
               <span className={s.cardIndex}>{p.index}</span>
               <div>
@@ -126,7 +124,7 @@ export default function Process() {
           <span className={s.bar}>
             <span className={s.barFill} />
           </span>
-          <span className="u-label">{String(PROCESS.length).padStart(2, '0')}</span>
+          <span className="u-label">{String(YEAR.steps.length).padStart(2, '0')}</span>
         </div>
       </div>
     </section>
