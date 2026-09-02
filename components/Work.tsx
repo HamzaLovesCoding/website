@@ -27,10 +27,12 @@ export default function Work() {
         cards.forEach((card, i) => {
           const inner = card.querySelector<HTMLElement>(`.${s.inner}`);
           const media = card.querySelector<HTMLElement>(`.${s.media}`);
+          const dim = card.querySelector<HTMLElement>(`.${s.dim}`);
           const isLast = i === cards.length - 1;
 
           // Parallax inside the frame — the plate drifts slower than the card
-          // it sits in, which is what gives the deck its depth.
+          // it sits in, which is what gives the deck its depth. The scrub lag
+          // lets it trail the scroll slightly instead of tracking it exactly.
           if (media) {
             gsap.fromTo(
               media,
@@ -42,42 +44,62 @@ export default function Work() {
                   trigger: card,
                   start: 'top bottom',
                   end: 'bottom top',
-                  scrub: true,
+                  scrub: 1,
                 },
               },
             );
           }
 
-          // Each card recedes as the next one arrives over it.
+          // Each card recedes as the next is dealt over it.
+          //
+          // Three things make the handoff feel like motion rather than a
+          // scroll readout: it is eased rather than linear, the scrub lag
+          // gives it weight, and it settles a little before the incoming card
+          // has finished covering it, so the card is at rest when it goes.
           if (!isLast && inner) {
-            gsap.to(inner, {
-              scale: 0.9,
-              filter: 'brightness(0.42) saturate(0.7)',
-              ease: 'none',
-              scrollTrigger: {
-                trigger: cards[i + 1],
-                start: 'top bottom',
-                end: 'top top',
-                scrub: 0.4,
-              },
-            });
+            gsap
+              .timeline({
+                scrollTrigger: {
+                  trigger: cards[i + 1],
+                  start: 'top 98%',
+                  end: 'top 4%',
+                  scrub: 1.1,
+                },
+              })
+              .to(
+                inner,
+                { scale: 0.9, yPercent: -2.5, duration: 1, ease: 'power2.inOut' },
+                0,
+              )
+              .to(dim, { opacity: 0.45, duration: 1, ease: 'power1.in' }, 0);
           }
         });
 
-        // Titles arrive line by line as their card comes to rest.
+        // Content arrives as the card settles. Triggered off the elements
+        // themselves rather than the card box, which is now taller than the
+        // viewport — a card's top crosses the screen long before its contents
+        // are anywhere near visible.
         cards.forEach((card) => {
           const title = card.querySelector<HTMLElement>(`.${s.title}`);
+          const rule = card.querySelector<HTMLElement>(`.${s.rule}`);
+          const detail = card.querySelectorAll<HTMLElement>(`.${s.blurb}, .${s.tag}`);
           if (!title) return;
+
           const { targets, revert } = split(title, 'lines');
           reverts.push(revert);
+
           gsap.set(targets, { yPercent: 110 });
-          gsap.to(targets, {
-            yPercent: 0,
-            duration: 1.2,
-            stagger: 0.08,
-            ease: 'expo.out',
-            scrollTrigger: { trigger: card, start: 'top 55%' },
-          });
+          gsap.set(detail, { opacity: 0, y: 14 });
+          gsap.set(rule, { scaleX: 0 });
+
+          gsap
+            .timeline({
+              scrollTrigger: { trigger: title, start: 'top 92%' },
+              defaults: { ease: 'expo.out' },
+            })
+            .to(targets, { yPercent: 0, duration: 1.3, stagger: 0.1 })
+            .to(rule, { scaleX: 1, duration: 1.4, ease: 'power3.out' }, 0.1)
+            .to(detail, { opacity: 1, y: 0, duration: 1, stagger: 0.08 }, 0.3);
         });
       }
 
@@ -146,6 +168,7 @@ export default function Work() {
                 />
               </div>
               <div className={s.veil} aria-hidden="true" />
+              <div className={s.dim} aria-hidden="true" />
 
               <div className={s.content}>
                 <div className={s.topRow}>
@@ -160,7 +183,7 @@ export default function Work() {
                       <h3 className={`${s.title} u-display`}>{p.title}</h3>
                       <p className={s.blurb}>{p.blurb}</p>
                     </div>
-                    <span className="u-label">{p.tag}</span>
+                    <span className={`${s.tag} u-label`}>{p.tag}</span>
                   </div>
                 </div>
               </div>

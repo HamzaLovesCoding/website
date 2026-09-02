@@ -129,8 +129,8 @@ const PALETTE = {
     [0.82, '#8c8c92'], [0.94, '#cfcfd4'], [1.0, '#f2f2f5'],
   ]),
   spectrum: ramp([
-    [0.0, '#030309'], [0.42, '#0b0918'], [0.64, '#1c1338'],
-    [0.78, '#42205a'], [0.88, '#96301f'], [0.95, '#dd6a1c'], [1.0, '#ffb96b'],
+    [0.0, '#030308'], [0.5, '#0c0812'], [0.72, '#241028'],
+    [0.85, '#6b1f38'], [0.93, '#c03a1c'], [0.975, '#e8701f'], [1.0, '#ffb96b'],
   ]),
   ink: ramp([
     [0.0, '#000000'], [0.48, '#08080a'], [0.72, '#17100a'],
@@ -248,6 +248,139 @@ const striate = (seed, freq = 130, tilt = 0.35) => {
   };
 };
 
+/**
+ * A shaft of light through haze.
+ *
+ * The source sits above the frame: a beam whose apex is visible reads as a
+ * cone drawn on the page rather than light coming from somewhere.
+ */
+const beam = (seed, cx = 0.34, tilt = 0.26, spread = 0.30) => {
+  const haze = makeFbm(seed, 5);
+  const dust = makeFbm(seed + 23, 4);
+  const wob = makeFbm(seed + 71, 3);
+  return (u, v, { aspect }) => {
+    const t = v + 0.22;                          // source above the top edge
+    const drift = (wob(v * 2.4, 3.3) - 0.5) * 0.12;
+    const axis = cx + t * tilt + drift;
+    const half = 0.02 + t * spread;
+    const d = (Math.abs(u - axis) * aspect) / half;
+    const core = Math.exp(-d * d * 1.15);
+    const atten = Math.pow(1 - clamp01(v) * 0.7, 0.8);
+    // Heavy haze breakup — a clean-edged cone looks drawn, not lit.
+    const h = 0.5 + haze(u * 3.0 * aspect, v * 1.9 + t * 1.4) * 1.0;
+    const grain = dust(u * 6.5 * aspect, v * 6.5) * 0.4;
+    return clamp01(core * atten * h + core * grain * 0.6);
+  };
+};
+
+/**
+ * Warped lattice with lit intersections.
+ *
+ * Two things stop it reading as wallpaper: the grid recedes in perspective,
+ * and only part of it carries any charge.
+ */
+const lattice = (seed, cells = 10) => {
+  const warp = makeFbm(seed, 4);
+  const life = makeFbm(seed + 41, 3);
+  const pool = makeFbm(seed + 97, 3);
+  return (u, v, { aspect }) => {
+    // Perspective: the grid compresses toward the top of the frame.
+    const depth = 0.35 + v * 1.5;
+    const wx = (warp(u * 1.4 * aspect, v * 1.4) - 0.5) * 0.18;
+    const wy = (warp(u * 1.4 * aspect + 4.2, v * 1.4 + 1.7) - 0.5) * 0.18;
+    const gx = (u * aspect + wx) * cells;
+    const gy = (v + wy) * cells / depth;
+    const fx = gx - Math.round(gx);
+    const fy = gy - Math.round(gy);
+    const line = Math.max(Math.exp(-fx * fx * 300), Math.exp(-fy * fy * 300));
+    const node = Math.exp(-(fx * fx + fy * fy) * 170);
+    const energy = life(gx * 0.3, gy * 0.3);
+    // Only a couple of regions are actually lit.
+    const charged = clamp01(pool(u * 1.3 * aspect, v * 1.3) * 2.0 - 0.35);
+    return clamp01((line * 0.7 * energy + node * 2.2 * Math.pow(energy, 1.8)) * charged);
+  };
+};
+
+/**
+ * A few enormous warped arcs sweeping through the frame.
+ *
+ * The centre sits well outside the picture — concentric rings around a visible
+ * centre read as a target, not as a surface.
+ */
+const rings = (seed, count = 2.1, cx = -0.35, cy = 1.35) => {
+  const warp = makeFbm(seed, 5);
+  const fine = makeFbm(seed + 63, 4);
+  return (u, v, { aspect }) => {
+    const dx = (u - cx) * aspect;
+    const dy = v - cy;
+    const w = (warp(u * 1.5 * aspect, v * 1.5) - 0.5) * 0.55;
+    const r = Math.sqrt(dx * dx + dy * dy) + w;
+    const band = Math.sin(r * count * Math.PI * 2) * 0.5 + 0.5;
+    const detail = 0.55 + fine(u * 4.5 * aspect, v * 4.5) * 0.9;
+    const env = 1 - smoothstep(0.3, 2.1, r);
+    return clamp01(Math.pow(band, 2.6) * env * detail * 1.8 + env * 0.1);
+  };
+};
+
+/** Long silky flow lines following a warped field. */
+const streams = (seed, freq = 44) => {
+  const flow = makeFbm(seed, 5);
+  const env = makeFbm(seed + 7, 3);
+  return (u, v, { aspect }) => {
+    const f = flow(u * 1.25 * aspect, v * 1.25);
+    const g = flow(u * 2.5 * aspect + 3.1, v * 2.5 + 8.2);
+    const s = Math.sin((v + f * 0.95 + g * 0.3) * freq) * 0.5 + 0.5;
+    const e = env(u * 1.8 * aspect, v * 1.8);
+    return clamp01(Math.pow(s, 4.2) * e * 2.1 + e * 0.16);
+  };
+};
+
+/**
+ * A fan of light rising from below the frame — attention, pointed somewhere.
+ * Keeping the vanishing point off-picture avoids the starburst-clipart read,
+ * and the per-spoke gain makes it a lit fan rather than a printed one.
+ */
+const converge = (seed, cx = 0.46, cy = 1.28, spokes = 30) => {
+  const warp = makeFbm(seed, 4);
+  const gainField = makeFbm(seed + 29, 3);
+  return (u, v, { aspect }) => {
+    const dx = (u - cx) * aspect;
+    const dy = v - cy;
+    const r = Math.sqrt(dx * dx + dy * dy);
+    const a = Math.atan2(dy, dx);
+    const w = (warp(u * 2.0 * aspect, v * 2.0) - 0.5) * 0.8;
+    // Integer spoke count keeps sin() continuous across the ±pi seam.
+    const s = Math.sin(a * spokes + w * 2.5) * 0.5 + 0.5;
+    // Individual spokes carry very different amounts of light.
+    const gain = Math.pow(gainField(Math.cos(a) * 2.2 + 7, Math.sin(a) * 2.2 + 7), 1.6);
+    const env = (1 - smoothstep(0.35, 1.6, r)) * clamp01(0.25 + v * 1.3);
+    return clamp01(Math.pow(s, 2.4) * env * gain * 3.2 + env * 0.1);
+  };
+};
+
+/** Radial energy burst. Sampled on the unit direction rather than the angle,
+    which would leave a seam where atan2 wraps. */
+const sparks = (seed, cx = 0.68, cy = 0.3) => {
+  const n = makeRidge(seed, 5);
+  const f = makeFbm(seed + 13, 4);
+  const drag = makeFbm(seed + 53, 4);
+  return (u, v, { aspect }) => {
+    // Warp the sampling point before going polar, so the burst is lopsided
+    // rather than radially symmetric.
+    const sx = u + (drag(u * 1.5 * aspect, v * 1.5) - 0.5) * 1.05;
+    const sy = v + (drag(u * 1.5 * aspect + 5.5, v * 1.5 + 2.2) - 0.5) * 1.05;
+    const dx = (sx - cx) * aspect;
+    const dy = (sy - cy) * 2.3;    // squashed hard, so it smears rather than radiates
+    const r = Math.sqrt(dx * dx + dy * dy) + 1e-4;
+    const ux = dx / r;
+    const uy = dy / r;
+    const streak = n(ux * 2.2 + 5, uy * 2.2 + 5);
+    const fine = n(ux * 5.6 + 11, uy * 5.6 + 11 + f(u * 2, v * 2) * 0.6);
+    const env = Math.exp(-r * r * 1.7);   // wide enough to fill the frame
+    return clamp01((Math.pow(streak, 2.2) * 0.8 + fine * 0.4) * env * 2.3 + env * 0.14);
+  };
+};
+
 /** Domain-warped mesh gradient — the loud, saturated card. */
 const mesh = (seed, scale = 1.8) => {
   const a = makeFbm(seed, 4);
@@ -264,13 +397,16 @@ const mesh = (seed, scale = 1.8) => {
 
 /* ----------------------------------------------------------------- main -- */
 
+/* One look per programme card, so no two read as the same picture:
+   a stage beam, a technical lattice, growth rings, flow lines, converging
+   spokes, and an energy burst. */
 const WORK = [
-  { look: smoke(7, 2.4, 1.7), palette: 'ember', gamma: 3.1, gain: 1.25 },
-  { look: ribbons(13, 3.2), palette: 'gold', gamma: 2.2, gain: 1.0 },
-  { look: mesh(21, 2.1), palette: 'spectrum', gamma: 2.6, gain: 1.15 },
-  { look: striate(29, 150, 0.42), palette: 'ash', gamma: 2.3, gain: 0.95 },
-  { look: ribbons(37, 4.2, 3.1), palette: 'ember', gamma: 2.1, gain: 1.1 },
-  { look: smoke(41, 3.4, 2.1), palette: 'ink', gamma: 2.5, gain: 1.3 },
+  { look: beam(7, 0.36, 0.24), palette: 'ember', gamma: 1.7, gain: 1.25 },
+  { look: lattice(13, 10), palette: 'ash', gamma: 1.5, gain: 1.35 },
+  { look: rings(21, 2.1), palette: 'gold', gamma: 1.9, gain: 1.0 },
+  { look: streams(29, 34), palette: 'ink', gamma: 1.8, gain: 1.1 },
+  { look: smoke(37, 1.9, 2.6), palette: 'spectrum', gamma: 3.5, gain: 1.1 },
+  { look: sparks(41, 0.38, 0.44), palette: 'ember', gamma: 1.9, gain: 1.25 },
 ];
 
 const GALLERY = [
